@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html> 
+  <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta http-equiv="Content-Style-Type" content="text/css">
+    <title>Processing.JS inside Webpages: Template</title> 
+  </head>
+  <body>
+	<!--This draws the canvas on the webpage -->
+    <canvas id="mycanvas"></canvas> 
+  </body>
+ 
+  <!-- Include the processing.js library -->
+  <!-- See https://khanacademy.zendesk.com/hc/en-us/articles/202260404-What-parts-of-ProcessingJS-does-Khan-Academy-support- for differences -->
+<!-- <script src="https://cdn.jsdelivr.net/processing.js/1.4.8/processing.min.js" type="text/javascript"></script> --> 
+  <!--   <script src="processing.min.js"></script>  -->
+  
+  
+<!--   <script src="processing.ROB.js"></script> -->
+  <script src="processing.ROB.js"></script>	<!--  load the script -->
+  
+  
+  <script>
+  var programCode = function(processingInstance) {
+    with (processingInstance) {
+      size(600, 600); 
+      frameRate(30);
+        
+
+
+// Paste code from Khan Academy here:->>>>
+
+
+      
+      
+
+// mouse clicked and hovered features
+
+// To do: when I click the button, I need the button to change colors
+
+// common function definitions
+//**************************************
+var small = 12;
+var medium = 19;
+var large = 30;
+var thinLine = function() {return strokeWeight(1);};
+var boldLine = function() {return strokeWeight(3);};//boldLine();
+var Background = function() {
+    return background(224, 224, 224);
+};
+var black = "black";
+var white = "white";
+var textColor = function(aColor) {
+    if ((aColor === "black") || (aColor === black)) {
+    return fill(0, 0, 0);  // text color
+    } else if ((aColor === "white") || (aColor === white)) {
+    return fill(255, 255, 255); 
+    } else if ((aColor === "red") || (aColor === red)) {
+    return fill(255, 0, 0);
+    } else if ((aColor === "green") || (aColor === green)) {
+    return fill(0, 255, 0);
+    } else if ((aColor === "blue") || (aColor === blue)) {
+    return fill(0, 0, 255);
+}};
+//**************************************
+
+// Button obj/func constructor
+// called w/ instance creation that use 
+// dict style-> key: value, ...(send)
+var Button = function(config) {
+    this.isHovered = false;
+    this.isClicked = false;
+    this.btnPosX = config.btnPosX || 0;
+    this.btnPosY = config.btnPosY || 0;
+    this.width = config.width || 150;
+    this.height = config.height || 50;
+    
+    // change return fill to change the default color value if none is passed
+    // CHANGE THE FILL(RGB) VALUES TO CHANGE THE COLOR OF THE BUTTONS WHEN THEY ARE PRESSED,
+    // HOVERED, OR NORMAL:
+    
+    this.btnColor = config.btnColor || function() {return fill(87, 210, 255);};
+    this.btnColorOnClick = config.btnColorOnClick || function() {return fill(5, 172, 250);};
+    this.btnHoverColor = config.btnHoverColor || function() {return fill(214, 252, 255);};
+    
+    this.btnLabel = config.btnLabel || "Click";
+    
+    this.onBtnClick = config.onBtnClick || function() {};//pass a function instrucion
+};
+
+// add a private draw func for Button class, called by instance.draw();
+Button.prototype.btnDraw = function() {
+    thinLine();//strokeWeight(1);
+    // if not hovered draw normal button
+    if (this.isClicked === false) {//if i don't click
+        //this.btnColor();
+        if (this.isHovered === false){// if I'm hovered, but not clicked
+            this.btnColor();//fill(0, 234, 255);//btn norm color. start w/ this color
+        } else if (this.isHovered === true) { //if I'm hovering
+            this.btnHoverColor();//fill(214, 252, 255);//btn hovr color
+        } 
+    } else if (this.isClicked === true) {	// load as normal
+        this.btnColorOnClick();
+    } 
+    
+    rect(this.btnPosX, this.btnPosY, this.width, this.height, 5);
+    textColor(black);//fill(0, 0, 0);//txt color
+    textSize(medium);
+    textAlign(LEFT, TOP);
+    text(this.btnLabel, this.btnPosX+10, this.btnPosY+this.height/4);
+};
+
+// private func to see if I clicked the btn
+Button.prototype.isMouseInside = function() {
+    return mouseX > this.btnPosX &&
+           mouseX < (this.btnPosX + this.width) &&
+           mouseY > this.btnPosY &&
+           mouseY < (this.btnPosY + this.height);
+};
+
+// private function for Button obj. called by instance when clicked
+Button.prototype.handleMouseClick = function() {
+    if (this.isMouseInside()) {
+        this.onBtnClick();//Show the text under the button
+        // change the color of the button
+        this.isClicked = true;//button was clicked
+        this.btnDraw();	// update color
+    }
+};
+
+// private function for Button obj. called by instance when clicked
+Button.prototype.handleMouseRelease = function() {
+    if (this.isClicked === true) {
+        // change the color of the button
+        this.isClicked = false;//button was released
+     // comment this out to show white after I click and release
+        this.btnDraw();	// update color
+    }
+};
+
+
+// private function for Button obj. called by instance when hovered
+Button.prototype.handleMouseHover = function() {
+    // if I already drew, don't keep redrawing
+    if (this.isMouseInside() && (this.isHovered === false)) {
+        this.isHovered = true;
+        this.btnDraw();
+        // when I am not hovering
+    } else if (!this.isMouseInside() && (this.isHovered === true)) {
+        this.isHovered = false;//reset
+        this.btnDraw();
+    } 
+};
+    // #IMPORTANT!!!
+    // #Tick functions...
+    // I either have to recheck more conditions every single time, or I have to redraw the same shape over and over.
+    //Checking for condtional true false is probably much faster than redrawing a shape and all of its features.
+    // Hint: Try to design the code so that I don't start the tick function until something happens, like I move my mouse into the canvas: mouseOver, and stop checking for hover events when my mouse leaves the canvas: mouseOut
+
+// CREATE A NEW BUTTON:
+// Send my values to the Button object class constructor for btn1. Dynamic var
+var btn1 = new Button({
+    btnPosX: 130,//100
+    btnPosY: 100,
+    btnLabel: "Please click!",
+    //When this.onClick(); is called, execute the code in the onClick func
+    onBtnClick: function() {
+        text("You made the right choice!", this.btnPosX, this.btnPosY+this.height);
+        
+    }
+});
+//btn1.draw();
+
+// define the btn2 properties as BTN
+var btn2 = new Button({
+    btnPosX: 130,//100
+    btnPosY: 213,
+    btnLabel:"No! Click ME!",
+    // pass a function to Button constr
+    onBtnClick: function() {
+        text("Yay, you picked me!", this.btnPosX, this.btnPosY+this.height);
+    }
+});
+//btn2.draw();//draw btn2 instance now
+
+// predefined func called when I press the screen
+// Don't use mouseClicked to trigger a
+// mouse click event, use mousePressed
+// mouseClicked executes when I press and release the mouse, not on pressed!
+//mouseClicked = function() {
+mousePressed = function() {
+    // check to see if I clicked btn
+    btn1.handleMouseClick();
+    btn2.handleMouseClick();
+    // change color when clicked and 
+    // when released, change back
+};
+
+// called when mouse is released frm btn
+mouseReleased = function() {
+    btn1.handleMouseRelease();
+    btn2.handleMouseRelease();
+};
+
+//btn1 and btn2 are (parents) instances of Button, not children.  They ARE the button, no child inheritance.
+
+
+// To do list:
+/*
+respond to click event
+ change color again
+*/
+
+
+//**************************************
+//Draw welcome on page load:
+Background();
+textColor(black); //fill(0, 0, 0);  // text color
+textSize(20);
+textAlign(CENTER, CENTER);
+//draw = function() {//debug use to test
+text("Welcome to Robert Ireland's button hover example, using ProcessingJS, from Khan Academy's button object spin-off.  Hover over a button to see them act like real buttons.", width/2+-91, height/2-215, 200, 400); 
+//**************************************
+
+// when my mouse enters the canvas, call mouseOver. Do once:
+//};//end draw debug for txt location
+//**************************************
+// mouse on canvas INITIALIZE:
+mouseOver = function() {
+    Background();//(240, 240, 240);
+    btn1.btnDraw();
+    btn2.btnDraw();
+    
+    // HEAVY ON THE RESOURCES!
+    //Called when mouse moves
+    // TICK FUNCTION
+    mouseMoved = function() {
+        btn1.handleMouseHover();
+        btn2.handleMouseHover();
+    };
+};
+//**************************************
+
+// on EXIT:
+// When my mouse leaves the canvas call:
+mouseOut = function() {
+    // redefine mouseMoved so it stops calling mouseHover
+    mouseMoved = function() {};// do nothing
+    Background();
+    textColor("white");//fill(255, 255, 255);//txt color
+    text("Paused", width/2-30, height/2-60);
+};
+
+
+
+
+/* DO THIS TO CREATE A CHILD (has a)
+var childButton = function() {};
+childButton.prototype = Object.create(Button.prototype);
+*/
+
+// I want my games to pause/save whenever the user's finger is not on the screen
+
+// Note: I can call "this." in any Button.prototype.name
+
+
+
+
+
+
+
+
+
+
+// Paste Processing Code before here-<<<<
+
+
+      
+    }};
+
+  // Get the canvas that ProcessingJS will use
+  var canvas = document.getElementById("mycanvas"); 
+  // Pass the function to ProcessingJS constructor
+  var processingInstance = new Processing(canvas, programCode); 
+  </script>
+</html>
