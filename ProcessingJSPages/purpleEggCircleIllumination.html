@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html> 
+  <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta http-equiv="Content-Style-Type" content="text/css">
+    <title>Processing.JS inside Webpages: Template</title> 
+  </head>
+  <body>
+  <br/>
+  <br/>
+<h1>
+Efficiently shading a sphere based on mouse position
+With help from: 
+https://www.khanacademy.org/computer-programming/spin-off-of-anti-aliased-edges-not-sure-about-blue-horizon-though/1925327317
+Based on: Rolling sphere
+Created by: Peter Collingridge
+<h1>
+  <br/>
+  <br/>
+
+  
+	<!--This draws the canvas on the webpage -->
+    <canvas id="mycanvas"></canvas> 
+  </body>
+ 
+  <!-- Include the processing.js library -->
+  <!-- See https://khanacademy.zendesk.com/hc/en-us/articles/202260404-What-parts-of-ProcessingJS-does-Khan-Academy-support- for differences -->
+<!-- <script src="https://cdn.jsdelivr.net/processing.js/1.4.8/processing.min.js" type="text/javascript"></script> --> 
+  <!--   <script src="processing.min.js"></script>  -->
+  
+  
+<!--   <script src="processing.ROB.js"></script> -->
+  <script src="processing.ROB.js"></script>
+  
+  
+  <script>
+  var programCode = function(processingInstance) {
+    with (processingInstance) {
+      size(400, 400); 
+      frameRate(30);
+        
+      // Paste code from Khan Academy here:->>>>
+      
+      
+      
+    // Efficiently shading a sphere based on mouse position
+// With help from: https://www.khanacademy.org/computer-programming/spin-off-of-anti-aliased-edges-not-sure-about-blue-horizon-though/1925327317
+
+var sphereX = 200;
+var sphereY = 200;
+var sphereR = 140;
+var sphereR2 = sphereR * sphereR;
+var sphereR1 = sphereR - 1;
+var sphereR12 = sphereR1 * sphereR1;
+var sphereRd = 1 / (sphereR2 - sphereR12);
+
+// Inverse radius
+var ixy = 1 / sphereR;
+
+var lightZ = 62;
+var lightZ2 = lightZ * lightZ;
+
+draw = function() {
+    background(0, 0, 0);
+    loadPixels();
+    
+    // Mouse controls
+    // pitch += (mouseY-pmouseY)*0.5;
+    // yaw += (mouseX-pmouseX)*0.5;
+    
+    var p = this.imageData.data;
+    var ms = millis();
+    
+    // Calculate normalised light vector
+    var lightXNorm = mouseX - sphereX;
+    var lightYNorm = mouseY - sphereY;
+    var lightDist = sqrt(lightXNorm * lightXNorm + lightYNorm * lightYNorm + lightZ2);
+    lightXNorm /= lightDist;
+    lightYNorm /= lightDist;
+    var lightZNorm = lightZ / lightDist;
+    
+    var x, y, dx, light, yp, xp, zp;
+    var drawY, pixelIndex;
+    
+    for (var y = -sphereR + 1; y < sphereR; y++) {
+        yp = y * ixy;
+        // Length of along x we go
+        dx = floor(sqrt(sphereR2 - y * y));
+        
+        // Where to draw the sphere
+        drawY = sphereX + (y + sphereY) * 400;
+
+        for (x = -dx; x <= dx; x++) {
+            // Position on sphere in the range 0 - 1
+            xp = x * ixy;
+            zp = sqrt(1 - xp * xp - yp * yp);
+            
+            // Dot product of light and position on sphere
+            // Normal of sphere = [xp, yp, zp]
+            light = 233 * max(0, xp * lightXNorm + yp * lightYNorm + zp * lightZNorm);
+            // reset 315 to 255 for max brightness w/o an eye
+            
+            // anti-alias
+            var xyr = x * x + y * y;
+            
+            // only pixels that touch the edge
+            if (xyr > sphereR12) {
+                light *= 1 - (xyr - sphereR12) * sphereRd;
+            }
+
+            pixelIndex = x + drawY << 2;
+            p[pixelIndex] = light;
+            p[pixelIndex + 2] = light;  // originally +1
+            p[pixelIndex + 3] = light;  // originally +2
+
+        }
+    }
+    
+    ms = millis() - ms;
+    updatePixels();
+    
+    // Test speed
+    fill(200);
+    text(ms, 370, 390);
+    //text(d, 370, 370);
+};
+
+
+
+
+
+
+      // Paste Processing Code before here-<<<<
+      
+    }};
+
+  // Get the canvas that ProcessingJS will use
+  var canvas = document.getElementById("mycanvas"); 
+  // Pass the function to ProcessingJS constructor
+  var processingInstance = new Processing(canvas, programCode); 
+  </script>
+</html>
