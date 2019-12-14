@@ -1,4 +1,4 @@
 # irelandlife.github.io
 Project Website
 
-This is my first real official website.  Couldn't have done it alone.  
+Just a fun project to understand more about websites.
