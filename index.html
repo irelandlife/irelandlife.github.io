@@ -38,107 +38,37 @@
 </ul>
 
 
-
-
-
-
-
 <br/>	<!-- New paragraph (using the break tag) -->
 <br/>	<!-- New paragraph (using the break tag) -->
 <br/>	<!-- New paragraph (using the break tag) -->
 
 
-
-
-
-
-
-
-<br/>	<!-- New paragraph (using the break tag) -->
-<br/>	<!-- New paragraph (using the break tag) -->
-<br/>	<!-- New paragraph (using the break tag) -->
-
-
-
-<p>
-
-Fun Code Projects: 10/26/2019:
-<br/>	
-
-<pre><code class="language-c++">
 	
-// fibinachi.cpp
-// This is the solution to the fibinachi problem that 
-// is also no recursive (someone said they had an interview q like this in my class)
-// It computes an input integer (with strong error protection except or ctrl d issue)
-// By Robert Ireland on 10/26/2019, rirelan4@gmail.com
-// F(0) = 0; F(1) = 1; F(2) = 1; F(3) = 2; F(4) = 3;
-		
+<!-- Needed for adding paypal checkout buttons to the website -->
+<script src="https://www.paypal.com/sdk/js?client-id=sb"></script>
+<script>paypal.Buttons().render('body');</script>
 
-#include iostream
-#include string
 
-using namespace std;
 
-int main()
-{
-	string sInput;
-	int input;
-	while (true)
-	{
-		cout << "Enter a value for the fibinachi: ";
-		cin >> sInput;
-		try
-		{
-			input = stoi(sInput);
-			if (input < 0) {throw "LITERALLY ANYTHING!";}
-		}
-		catch (...)
-		{
-			cout << "Please enter a positive integer only." << endl;
-			continue;
-		}
-		break;
-	}
-	int array[input+1];
-	array[0] = 0;
-	array[1] = 1;
-	if ((input == 1) || (input == 0))
-	{
-		cout << "The fibinachi of " << input << " is: " << input << endl;
-		return 0;
-	}
-	// This algorithm is O(n)
-	for (int i = 2; i <= input; i++)
-	{
-		array[i] = array[i-2] + array[i-1];
-	}
-	cout << "The fibinachi of " << input << " is: " << array[input] << endl;
-	return 0;
-}
+	
+	
+	
+	
+	
 
-</code></pre>
+
+
+
+
+
+<br/>	<!-- New paragraph (using the break tag) -->
+<br/>	<!-- New paragraph (using the break tag) -->
+<br/>	<!-- New paragraph (using the break tag) -->
+
+	
+
 
 <br/>
-
-<pre><code class="language-makefile">
-#Makefile
-
-nm = fibinachi
-cc = g++
-c = -cpp
-o = -o
-all: $(nm) shell
-$(nm): $(nm).cpp
-	$(cc) $(o) $(nm) $(nm).cpp
-shell:
-	./$(nm)
-
-</code></pre>
-
-	
-</p>
-	<br/>
 <p>JavaScript and ProcessingJS are used to create the image on the right.</p>
 <br/>
 <h4>
