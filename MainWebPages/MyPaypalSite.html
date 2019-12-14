@@ -7,15 +7,16 @@
 
 <body>
   <script
-<!--           send the money to my account with my client ID -->
+    //send the money to my account with my client ID
     var SB_CLIENT_ID = "AcXLsHuK9tqkNoJX9Xv8gt31fCfgVHTIYMSk-ilUW9zHoXB2wv2S6uETbcro-h-pkUllpw-kHFz6htFw"
     src="https://www.paypal.com/sdk/js?client-id=" + SB_CLIENT_ID> // Required. Replace SB_CLIENT_ID with your sandbox client ID.
   </script>
   
-<!--  Create the paypal buttons -->
+<!-- Create the paypal buttons -->
    <div id="paypal-button-container">
-<!--   this is the div where the paypal button will go -->
+<!--  this is the div where the paypal button will go -->
   </div>
+  
   <script>
     paypal.Buttons().render('#paypal-button-container');
     // This function displays Smart Payment Buttons on your web page.
