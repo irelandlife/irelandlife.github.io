@@ -1,0 +1,404 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Mastering of the Elements Game</title>
+    <meta name="description" content="A unique and beautiful idea for a game that lets you master the elements of the universe!">
+    <meta name="author" content="Robert Ireland">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+    <style>
+        canvas {
+            border: 1px solid #d3d3d3;
+            background-color: #f1f1f1;
+        }
+        #canvasLocation {
+            /* margin-top: 20px; */
+            /* margin-left: 4.5%; */
+            position: absolute;
+            top: 15px;/*50%;*/
+            left: 50%;
+            -ms-transform: translate(-50%, 0%);
+            /* , -50%); */
+            transform: translate(-50%, 0%)
+            /* , -50%); */
+        }
+        #startButton {
+            margin: 10px;
+            position: absolute;
+            /* top: 50%; */
+            bottom: 20%;
+            left: 50%;
+            -ms-transform: translate(-50%, -50%);
+            transform: translate(-50%, -50%);
+        }
+    </style>
+</head>
+<body>
+
+<!-- </body> onkeydown=""> -->
+    <!-- onkeydown="keyWasPressed(event)" -->
+
+    <!-- I'm first going to try and make as much of this game in canvas since I will be able to have almost all the control that I want, and it
+    will be as cross platform as it can get at that point. And the future will bring more ease of adding new controls/signals/outside interactions -->
+
+<p id="canvasLocation"></p>
+<p></p>
+<!-- make the button dissapear after pressing start -->
+<button id="startButton" onclick="startGame(); document.body.setAttribute('onkeydown', 'keyWasPressed(event)'); document.body.setAttribute('onkeyup', 'keyWasReleased(event)'); this.style.display='none'"> Start Game </button>
+<!-- document.getElementById('tagName').setAttribute('onkeydown', 'keyWasPressed(event)'); This allows key presses to be listed for after start is pressed-->
+
+<script>
+function startGame() {
+    myGameArea.start();
+
+    // creates the player hero char:
+    me_ThePlayer1CharacterHero = new me_ThePlayer1CharacterHero();
+
+    // create a few game objs
+    block1 = new blockComponent(100, 320, 30, 30, "red");
+    block2 = new blockComponent(220, 200, 50, 50, "blue");
+    ball1 = new ballComponent(600, 300, 50, "red");
+
+    controllableGameObjs["block1"] = block1; // .push(block1);
+    controllableGameObjs["block2"] = block2;
+    controllableGameObjs["ball1"] = ball1;
+    
+
+    // I would like to have gravity turned on by default. Then if I control an obj, I'll just make sure that obj isn't affected by gravity while it's levitating
+    // Turn on gravity for all noncontrolled objs:
+}
+
+// any game obj that I can potentially control should be in here.
+var controllableGameObjs = {};
+
+
+// This function runs on a timer. Every tick (20ms for 50FPS), the entire screen gets cleared and the objs in the canvas get updated
+function updateGameArea() {
+    myGameArea.clear(); // clear the screen before updating obj positions and calling update on the moved objs.
+
+
+    // Determine what action to perform on what obj
+    // ball1.y += 10;
+    // if (ball1.x > 1200) {
+    //     ball1.x = 50;
+    // }
+
+    // // Determine which objs need to fall b/c of gravity
+    // // I need a list of all 
+    // if (ball1.isUnderMyControl == true) {
+    //     // if my specific power is strong enough to force control pick up, decelerate a moving obj, or hold an obj that was already in the air,
+    //     // then I can control it with my force power.
+    // } else {
+    // }
+
+    // Tell the ball1 that player1 is actively trying to control it
+    ball1.isUnderMyControl = true;
+    block1.isUnderMyControl = true;
+    block2.isUnderMyControl = true;
+    me_ThePlayer1CharacterHero.objImControlling = ball1;
+
+
+
+    // controllableGameObjs["ball1"].isUnderMyControl = true;
+
+    // I would like to calculate a sum of forces rather than just gravity:
+    // sumOfForces(ball1);
+    // sumOfForces(block1);
+    // sumOfForces(block2);
+
+
+    // Calculate gravity for every obj:
+    // If the obj moved, update the drawing for ball1:
+    gravity(ball1);
+    gravity(block1);
+    gravity(block2);
+    
+
+
+    // Update all the objs that were or will be visible (so that they can get redrawn to the screen) after every clear screen call
+    ball1.update();
+    block1.update();
+    block2.update();
+}
+
+
+
+
+
+function me_ThePlayer1CharacterHero(x=0, y=0, z=0, hipRotationY=0, leftArmAimingX=0, leftArmAimingY=screen.availHeight, rightArmAimingX=screen.width, rightArmAimingY=screen.availHeight, mass=100, waterForcePower=0, fireForcePower=0, airForcePower=0, rockForcePower=0, metalForcePower=0, electricityForcePower=0, laserForcePower=0, staminaEnergy=100, punchingPower=10, flyingSpeed=0, flyingAcceleration=0, runningSpeed=10, runningAcceleration=10, jumpingHeight=1, swimmingSpeed=1) {
+    this.waterForcePower=waterForcePower;
+    this.fireForcePower=fireForcePower;
+    this.airForcePower=airForcePower;
+    this.rockForcePower=rockForcePower;
+    this.metalForcePower=metalForcePower;
+    this.electricityForcePower=electricityForcePower;
+    this.laserForcePower=laserForcePower;
+    this.staminaEnergy=staminaEnergy; 
+    this.punchingPower=punchingPower;
+    this.flyingSpeed=flyingSpeed;
+    this.flyingAcceleration=flyingAcceleration; 
+    this.runningSpeed=runningSpeed; 
+    this.runningAcceleration=runningAcceleration; 
+    this.jumpingHeight=jumpingHeight;
+    this.swimmingSpeed=swimmingSpeed;
+    this.x = x;
+    this.y = y;
+    this.z = z;
+    this.hipRotationY=hipRotationY;
+    this.leftArmAimingX = leftArmAimingX;
+    this.leftArmAimingY = leftArmAimingY;
+    this.rightArmAimingX = rightArmAimingX;
+    this.rightArmAimingY = rightArmAimingY;
+    this.mass = mass;
+    this.tryingToForceHoldObjSteady = false;
+    this.tryingToForceLiftObjUp = false;
+    this.tryingToForceThrowingObjDown = false;
+    this.exertingForce = 0; // this should change as I try to change what i want to do. the exertingForce should increase when I want to throw something up
+    this.objImControlling = null;
+    this.myElementSkillSet = {water: 20, fire: 20, ice: 20, air: 20, rock: 20, metal: 20, electricity: 20, laser: 20};
+    // this.ctx = myGameArea.context;
+    // I'm not going to draw the player character to the screen for now since I want this to be a 1st person game
+    // I will work on drawing the arms to the screen later. And I will later determine how to calculate where the player
+    // is aiming their arms with a dot that shows the position.
+    // this.update = function() {
+    //     if (leftArmUp == true) {
+    //         ctx=myGameArea.context;
+    //         // If I'm not doing vr would like to draw arms to the screen that have the same orientation as player 1's arms
+    //         // draw the arms as they are on the player in real life
+
+    //     }
+    // }
+}
+
+
+// When I press the d key, I would like to increase the vertical acceleration on the circle ball1
+function keyWasPressed(event) {
+    // var keyCode = event.which || event.keyCode;
+    var keyCode = event.keyCode;
+    if (keyCode >= 65 && keyCode <= 90) {
+        keyCode +=32;
+    }    
+
+    var pressedKey = String.fromCharCode(keyCode);  //String.fromCodePoint(x);     // Convert the value into a character
+    
+    // var obj = me_ThePlayer1CharacterHero.objImControlling;
+
+    // if (obj != null) { // if obj exists, check which key was pressed
+        // determine how powerful I am against the object given its type
+        
+    if (pressedKey == 'd') { // decelerate the obj and hold the obj steady
+        // console.log("d was pressed");
+        me_ThePlayer1CharacterHero.tryingToForceHoldObjSteady = true;
+    }
+    if (pressedKey == 'e') { // lift and accel the obj in the air
+        me_ThePlayer1CharacterHero.tryingToForceLiftObjUp = true;
+        // me_ThePlayer1CharacterHero.exertingForce = maxElementalForce;
+    }
+    if (pressedKey == 'f') { // throw the obj down
+        me_ThePlayer1CharacterHero.tryingToForceThrowingObjDown = true;
+        // me_ThePlayer1CharacterHero.exertingForce = -maxElementalForce;
+    }
+    // }
+    // console.log(chrCode)
+    // console.log("a key was pressed");
+    // console.log(pressedKey)
+    // console.log(keyCode)
+}
+
+function keyWasReleased(event) {
+    me_ThePlayer1CharacterHero.tryingToForceHoldObjSteady = false;
+    me_ThePlayer1CharacterHero.tryingToForceLiftObjUp = false;
+    me_ThePlayer1CharacterHero.tryingToForceThrowingObjDown = false;
+    me_ThePlayer1CharacterHero.exertingForce = 0;
+    // console.log("key was released")
+}
+
+function sumOfForces(obj) {
+    if (obj.isUnderMyControl == true) { // if I have an obj under my control, make sure the exertingForce is correct given the input
+        // console.log("me_ThePlayer1CharacterHero.exertingForce")
+        var myElementalPowerRating = me_ThePlayer1CharacterHero.myElementSkillSet[obj.elementType];
+        var maxElementalForce = 0;
+        // make sure I got a number!
+        if (myElementalPowerRating != NaN) {
+            maxElementalForce = myElementalPowerRating * obj.mass; // this is the max force that I can issue against this element type
+        }
+        if (me_ThePlayer1CharacterHero.tryingToForceHoldObjSteady == true) {
+            // There are two situations I will run into right now
+            // if the obj is on the ground, I need to lift it up with an acceleration force up
+            // if the obj is falling, I need to decelerate it and then hold it steady
+            // I want to exert a force only if the obj isn't moving
+            // I would like the falling/rising object to slowly settle into 0 velocity position with no oscillation at first
+            // +/-6 should be the distance calculated in meters from the object in terms of m/s
+            if (obj.objVelocity > 6 || obj.objVelocity < -6) { // if the obj is moving fast:
+                // if (obj.objVelocity > 6) { // fast upward
+                //     // If this gets executed, I need to make sure it gets executed again 
+                //     me_ThePlayer1CharacterHero.exertingForce = -1*maxElementalForce;
+                //     // I need exertingForce to change to Gravity * mass when V == 0
+                //     console.log("v > 5m/s")
+                // }
+                // if (obj.objVelocity < -6) { // fast downward
+                //     me_ThePlayer1CharacterHero.exertingForce = maxElementalForce;
+                //     console.log("v < 5m/s")
+                // }
+                console.log("fast object")
+                me_ThePlayer1CharacterHero.exertingForce = maxElementalForce * -1*obj.objVelocity / Math.abs(obj.objVelocity);
+
+            } else { // if the obj is moving very slow
+                obj.objVelocity = 0;
+                me_ThePlayer1CharacterHero.exertingForce = GRAVITY * obj.mass;                
+            }
+        } else if (me_ThePlayer1CharacterHero.tryingToForceLiftObjUp == true) {
+            me_ThePlayer1CharacterHero.exertingForce = maxElementalForce;
+        } else if (me_ThePlayer1CharacterHero.tryingToForceThrowingObjDown == true) { // throw the obj down
+            me_ThePlayer1CharacterHero.exertingForce = -maxElementalForce;
+        } else {
+            me_ThePlayer1CharacterHero.exertingForce = 0;
+        }
+        return -1*GRAVITY*obj.mass + me_ThePlayer1CharacterHero.exertingForce;
+        // obj.isUnderMyControl = false;
+    }
+    return -1*GRAVITY*obj.mass; // gravity down is the default option
+}
+
+var GRAVITY = 10;//m/s^2
+
+// call gravity on an obj to make sure it falls towards earth
+function gravity(obj) {
+    // I need to convert obj height from pixels to meters before applying kinematic laws:
+    // var objPixelHeight_y = obj.objHeight(); // this is height in pixels from the top of the screen. I would like height in meters from the ground
+    // Determine the height from the ground in meters:
+    var objMetersAboveGround_y = obj.objMetersAboveGround;// the obj itself needs to keep track of how high it is off the ground in meters
+    // Ground is 0m above ground for now.
+
+    var sumOfAccelerations_y = sumOfForces(obj) / obj.mass; // make sure this is correct
+
+    var objInitialVelocity_y = obj.objVelocity; // I'll keep this in meters/sec all the time
+
+    // The finalVelocity is needed to keep track of the correct objInitialVelocity_y
+    // var finalVelocity_y = objInitialVelocity_y + sumOfAccelerations_y * deltaTime;
+    var finalVelocity_y = objInitialVelocity_y + sumOfAccelerations_y * deltaTime;
+    // The finalPosition_y tells me where's the maximum distance the obj should be (unless there is something under it or a new force on it)
+    var finalPosition_y = objMetersAboveGround_y + objInitialVelocity_y*deltaTime + 0.5*sumOfAccelerations_y*(deltaTime**2);
+    
+    // I need to convert finalPosition_y from meters to pixels from the top of the screen
+    // I need to know how many meters tall my screen is, what direction/orientation my screen is looking at, where my screen is located, 
+    // etc. To simplify the process for a 2d simulation, I will assume basic viewing options for now
+    // To determine the obj's final position in pixels, where the bottom of the screen is ground and the top of the screen is some distance above the objs.
+    // The obj is going to fall a little bit, if I know how high up it was it meters and in pixels, and I know how many pixels is at the bottom of the screen and 0 meters,
+    // I can figure out where it's located in pixels:
+    var numPixels_y = myGameArea.canvasHeight;
+    // var ball_x // determine how far the ball is from my eyes and then update 6 meters to the correct distance the ball is from my eyes
+    var finalObjPixelHeight_y = numPixels_y+(-1*numPixels_y/6)*finalPosition_y; // assuming the ball's x position is 6m away from me
+
+    // now I can update objHeight_y and velocity if they aren't going to hit the ground. Otherwise, I need to draw them on the ground
+    if (finalObjPixelHeight_y >= myGameArea.canvasHeight) {
+        var numPixelsAboveGround = 1;
+        // If the ball would go past the canvas ground if it wasn't for me:
+        // set the ball on the ground with no bounce:
+        finalObjPixelHeight_y = myGameArea.canvasHeight-numPixelsAboveGround;
+        finalPosition_y = numPixelsAboveGround/(numPixels_y+(-1*numPixels_y/6));
+        finalVelocity_y = 0;
+    }
+    obj.y = finalObjPixelHeight_y; // obj.y needs to be the very bottom y position of the obj
+    obj.objVelocity = finalVelocity_y;
+    obj.objMetersAboveGround = finalPosition_y; // I need to update the obj height above ground
+}
+
+
+
+// elementType="Water", Rock, Fire, air, metal, electricity, laser
+
+// draw an circle/ball to the canvas:
+function ballComponent(x, y, radius, color, filled=true, mass=50, elementType="water", objVelocity=0, objMetersAboveGround=4) {
+    this.objMetersAboveGround = objMetersAboveGround;
+    this.objVelocity = objVelocity;
+    this.elementType = elementType;
+    this.isUnderMyControl = false;
+    // this.gravity = gravity; // default 10m/s^2
+    this.mass = mass; // this is the mass of the ball in Kg
+    // this.weight = this.mass * 10; // default weight is 300N
+    this.x = x;
+    this.y = y;
+    this.radius = radius;
+    this.obHeight = function() {return this.y + this.radius;};
+    this.filled = filled;
+    // update is needed for redrawing the component to the canvas every tick
+    this.update = function() {
+        ctx = myGameArea.context;
+        ctx.fillStyle = color;
+        ctx.beginPath();
+        ctx.arc(this.x-this.radius, this.y-this.radius, this.radius, 0, 2 * Math.PI);
+        if (this.filled == true) {
+            ctx.fill();
+        } else {
+            ctx.stroke();
+        }
+    }
+    // this.gravityUpdate = function() {
+    //     if ((this.y+this.radius) < ctx.height) {
+    //         this.y = this.y + 1; // I would like position, velocity, and sum of acceration forces in the x,y, and z axis being calculated here
+    //     }
+    // }
+}
+
+// draw a square/rectangle/block to canvas
+function blockComponent(x, y, width, height, color, mass=100, elementType="rock", objVelocity=0, objMetersAboveGround=4) {
+    this.objMetersAboveGround = objMetersAboveGround;
+    this.objVelocity = objVelocity;
+    this.elementType = elementType;
+    this.isUnderMyControl = false;
+    this.mass = mass; // this is the mass of the block in Kg
+    this.width = width;
+    this.height = height;
+    this.x = x;
+    this.y = y;
+    this.objHeight = function() {return this.y + this.height;};
+    this.color = color;
+    this.update = function() {
+        ctx = myGameArea.context;
+        ctx.fillStyle = color;
+        ctx.fillRect(this.x-this.width, this.y-this.height, this.width, this.height);
+    }
+}
+
+var screenHeightPercent = 0.80;
+var screenWidthPercent = 0.90;
+
+// In the myGameArea obj, there's an interval which will run the updateGameArea() 
+// function every 20th millisecond (50 times per second). Also there's a function called clear(), that clears the entire canvas.
+var myGameArea = {
+    canvasHeight : screenHeightPercent*screen.availHeight,
+    canvasWidth : screenWidthPercent*screen.width,
+    canvas : document.createElement("canvas"),
+    start : function() {
+        this.canvas.width = screenWidthPercent*screen.width;
+        this.canvas.height = screenHeightPercent*screen.availHeight;
+        this.context = this.canvas.getContext("2d");
+        document.getElementById("canvasLocation").appendChild(this.canvas);
+        // create a timer with setInterval that triggers updateGameArea() to get called every 20ms (50FPS)
+        this.interval = setInterval(updateGameArea, _50FPS);
+    },
+    clear : function() {
+        this.context.clearRect(0, 0, this.canvas.width, this.canvas.height); // clear the entire canvas
+    }
+}
+
+var _50FPS = 20; // 1/(20*10^-3) == 50 FPS == 1/20ms
+// var _40FPS = 25;
+// var _30FPS = 33.3;
+
+// var deltaTime = _50FPS*10**-3; // 20ms // 0.020
+var deltaTime = 0.020; // 20ms // 0.020sec
+
+
+// fillRect(x, y, width, height)
+// Draws a filled rectangle.
+// strokeRect(x, y, width, height)
+// Draws a rectangular outline.
+// clearRect(x, y, width, height)
+// Clears the specified rectangular area, making it fully transparent.
+
+</script>
+</body>
+</html>
