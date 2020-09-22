@@ -93,10 +93,13 @@ function startGame() {
     me_ThePlayer1CharacterHero = new me_ThePlayer1CharacterHero(0, 0, 4*pixelsPerMeter);
     hero = me_ThePlayer1CharacterHero;
 
+    myGameArea.canvasHeight
+    myGameArea.canvasWidth
+
     // create a few game objs
-    block1 = new blockComponent(100, 320, 0, 30, 30, "red", 30, "fire");
-    block2 = new blockComponent(220, 200, 0, 50, 50, "gray", 50, "metal");
-    ball1 = new ballComponent(500, 300, 0, 100, "blue", true, 80, "water");
+    block1 = new blockComponent(0.15 * myGameArea.canvasWidth, 200, 0, 30, 30, "red", 40, "fire");
+    block2 = new blockComponent(0.45 * myGameArea.canvasWidth, 200, 0, 50, 50, "gray", 50, "metal");
+    ball1 = new ballComponent(0.95 * myGameArea.canvasWidth, 200, 0, 100, "blue", true, 80, "water");
 
     controllableGameObjs["block1"] = block1;
     controllableGameObjs["block2"] = block2;
