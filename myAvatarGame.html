@@ -20,6 +20,7 @@
             background-color: #f1f1f1;
             -webkit-user-select: none; 
             -moz-user-select: none;
+            touch-action: manipulation;
         }
         #canvasLocation {
             /* margin-top: 20px; */
@@ -29,6 +30,7 @@
             left: 50%;
             -webkit-user-select: none;
             -moz-user-select: none;
+            touch-action: manipulation;
             -ms-transform: translate(-50%, 0%);
             /* , -50%); */
             transform: translate(-50%, 0%);
@@ -67,7 +69,7 @@ will be as cross platform as it can get at that point. And the future will bring
 <!-- document.getElementById('tagName').setAttribute('onkeydown', 'keyWasPressed(event)'); This allows key presses to be listed for after start is pressed-->
 <!-- <button id="accelButton" ontouchstart="accelButton('Pressed');" ontouchend="accelButton('Released');" >Accelerate Up</button> -->
 <!-- <button id="accelButton" ontouchstart="accelButton('Pressed'); console.log('ontouchstart');" ontouchend="accelButton('Released'); console.log('ontouchend');" >Accelerate Up</button> -->
-<p>Hello</p>
+<!-- <p>Hello</p> -->
 
 
 <script>
