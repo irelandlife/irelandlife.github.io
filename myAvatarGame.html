@@ -46,19 +46,20 @@
 <p id="canvasLocation"></p>
 <p id="e1"></p>
 <!-- make the button dissapear after pressing start -->
-<button id="startButton" onclick="startGame(); document.body.setAttribute('onkeydown', 'keyWasPressed(event)'); document.body.setAttribute('onkeyup', 'keyWasReleased(event)'); this.style.display='none'"> Start Game </button>
+<button id="startButton" touchstart="this.onclick.call();" onclick="startGame(); document.body.setAttribute('onkeydown', 'keyWasPressed(event)'); document.body.setAttribute('onkeyup', 'keyWasReleased(event)'); this.style.display='none'"> Start Game </button>
 <!-- document.getElementById('tagName').setAttribute('onkeydown', 'keyWasPressed(event)'); This allows key presses to be listed for after start is pressed-->
 <!-- ontouchstart='screenWasTouched(event)';  -->
 
-<p>Hello safari iphone</p>
+<p>Hello iphone</p>
 
 <script>
 
-document.getElementById("startButton").setAttribute('touchstart', function(event) {
-    // document.getElementById("e1").innerHTML = "Button touched";
-    // document.write("start button touched");
-    document.getElementById("startButton").onclick.call(); // = true;
-}, false);
+// execute button.onclick.call() to treat a touch event on a button the same as a mouse click
+// document.getElementById("startButton").setAttribute('touchstart', function(event) {
+//     // document.getElementById("e1").innerHTML = "Button touched";
+//     // document.write("start button touched");
+//     document.getElementById("startButton").onclick.call(); // = true;
+// }, false);
 
 
 
