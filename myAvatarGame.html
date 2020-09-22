@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" ontouchstart="accelButton('Pressed');" ontouchend="accelButton('Released');">
 <head>
     <meta charset="utf-8">
     <title>Mastering of the Elements Game</title>
@@ -42,12 +42,12 @@
             -ms-transform: translate(-50%, -50%);
             transform: translate(-50%, -50%);
         }
-        html, body {
+        /* html, body {
             height: 95%;
         }
         .full-height {
             height: 100%;
-        }
+        } */
     </style>
 </head>
 <body>
@@ -57,7 +57,7 @@
 
     <!-- I'm first going to try and make as much of this game in canvas since I will be able to have almost all the control that I want, and it
     will be as cross platform as it can get at that point. And the future will bring more ease of adding new controls/signals/outside interactions -->
-<div class="full-height" ontouchstart="accelButton('Pressed');" ontouchend="accelButton('Released');">
+<!-- <div class="full-height" ontouchstart="accelButton('Pressed');" ontouchend="accelButton('Released');"> -->
 <p id="canvasLocation"></p>
 <p id="belowCanvas"></p>
 <!-- make the button dissapear after pressing start -->
@@ -72,7 +72,7 @@
 
 <!-- <p>Hello</p> -->
 
-</div>
+<!-- </div> -->
 
 <script>
 
