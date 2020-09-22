@@ -60,13 +60,23 @@
 <!-- ontouchstart='screenWasTouched(event)';  -->
 
 
-<button id="accelButton" touchstart="this.onmousedown.call();" onmousedown="accelButton('Pressed')" touchend="this.onmouseup.call();" onmouseup="accelButton('Released');">Accelerate Up</button>
+<button id="accelButton" touchstart="this.onclick.call();" onclick="accelButton('Pressed')" touchend="accelButton('Released');">Accelerate Up</button>
+<!-- onmouseup="accelButton('Released'); -->
 
 
-
-<!-- <p>Hello</p> -->
+<p>Hello</p>
 
 <script>
+
+
+function accelButton(action) {
+    if (action == "Pressed") {
+        me_ThePlayer1CharacterHero.tryingToForceLiftObjUp = true;
+    } else if (action == "Released") {
+        me_ThePlayer1CharacterHero.tryingToForceLiftObjUp = false;
+    }
+    
+}
 
 
 var hero = null;
@@ -203,15 +213,6 @@ function me_ThePlayer1CharacterHero(x=0, y=0, z=3.6*4440, hipRotationY=0, leftAr
 // I would also like to start working on propelling objects forward, with accurate forces applied.
 // In order to maintain a strong forceful low density element throw, like with air or fire, I will need to hold the force acceleration the entire time
 // With elements like rock, metal, ice, etc, I 
-
-function accelButton(action) {
-    if (action == "Pressed") {
-        me_ThePlayer1CharacterHero.tryingToForceLiftObjUp = true;
-    } else if (action == "Released") {
-        me_ThePlayer1CharacterHero.tryingToForceLiftObjUp = false;
-    }
-    
-}
 
 
 // When I press the d key, I would like to increase the vertical acceleration on the circle ball1
