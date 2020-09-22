@@ -13,7 +13,12 @@
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black" />
 
-    <!-- <meta name="viewport" content="width=device-width, initial-scale=1.0"/> -->
+    <!-- //APP ICONS 
+    <link rel="apple-touch-icon" href="/img/icon.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="/img/icon.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="/img/icon.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="/img/icon.png"> -->
+
 
     <style>
         html {
@@ -92,23 +97,7 @@ will be as cross platform as it can get at that point. And the future will bring
 
 
 <script>
-if( !window.location.hash && window.addEventListener ) {
-    window.addEventListener("load", function() {
-        setTimeout(function(){
-            window.scrollTo(0, 0);
-        }, 0);
-    });
-    window.addEventListener( "orientationchange",function() {
-        setTimeout(function(){
-            window.scrollTo(0, 0);
-        }, 0);
-    });
-    window.addEventListener( "touchstart",function() {
-         setTimeout(function(){
-             window.scrollTo(0, 0);
-         }, 0);
-     });
-}
+
 
 document.addEventListener('contextmenu', event => event.preventDefault());
 // document.addEventListener('copy', event => event.preventDefault());
@@ -630,12 +619,12 @@ function heroDistanceToObj_m(obj) {
 // In the myGameArea obj, there's an interval which will run the updateGameArea() 
 // function every 20th millisecond (50 times per second). Also there's a function called clear(), that clears the entire canvas.
 var myGameArea = {
-    canvasHeight : screen.availHeight-135, // screenHeightPercent*screen.availHeight,
-    canvasWidth : screen.availWidth-15, // screenWidthPercent*screen.width,
+    canvasHeight : screen.availHeight-0, // screenHeightPercent*screen.availHeight,
+    canvasWidth : screen.availWidth-0, // screenWidthPercent*screen.width,
     canvas : document.createElement("canvas"),
     start : function() {
-        this.canvas.height = screen.availHeight-135; //screenHeightPercent*screen.availHeight;
-        this.canvas.width = screen.availWidth-15; //screenWidthPercent*screen.width;
+        this.canvas.height = screen.availHeight-0; //screenHeightPercent*screen.availHeight;
+        this.canvas.width = screen.availWidth-0; //screenWidthPercent*screen.width;
         this.context = this.canvas.getContext("2d");
         document.getElementById("canvasLocation").appendChild(this.canvas);
         // create a timer with setInterval that triggers updateGameArea() to get called every 20ms (50FPS)
