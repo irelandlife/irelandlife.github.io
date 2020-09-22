@@ -52,6 +52,10 @@
 
 
 <script>
+document.getElementById("startButton").setAttribute('touchstart', function(event) {
+    document.getElementById("startButton").onclick.call(); // = true;
+}, false);
+
 // document.getElementById('touchable').addEventListener('touchstart', function(ev) {      if (ev.touches.item(0) == ev.targetTouches.item(0))
 document.body.addEventListener('touchstart', function(event) { 
     // document.write("Screen was touched");
