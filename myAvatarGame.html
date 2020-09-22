@@ -35,7 +35,7 @@
         }
     </style>
 </head>
-<body>
+<body touchstart="screenPressed()">
 
 <!-- </body> onkeydown=""> -->
     <!-- onkeydown="keyWasPressed(event)" -->
@@ -50,9 +50,14 @@
 <!-- document.getElementById('tagName').setAttribute('onkeydown', 'keyWasPressed(event)'); This allows key presses to be listed for after start is pressed-->
 <!-- ontouchstart='screenWasTouched(event)';  -->
 
-<p>Hello iphone</p>
+<p>Hello</p>
 
 <script>
+
+function screenPressed() {
+    me_ThePlayer1CharacterHero.tryingToForceLiftObjUp = true;
+    document.body.appendChild(document.createElement("P").innerHTML = "screen touched");
+}
 
 // execute button.onclick.call() to treat a touch event on a button the same as a mouse click
 // document.getElementById("startButton").setAttribute('touchstart', function(event) {
