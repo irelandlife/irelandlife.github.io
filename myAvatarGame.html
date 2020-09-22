@@ -33,9 +33,18 @@
             -ms-transform: translate(-50%, -50%);
             transform: translate(-50%, -50%);
         }
+        #accelButton {
+            margin: 10px;
+            position: absolute;
+            /* top: 50%; */
+            bottom: 10%;
+            left: 60%;
+            -ms-transform: translate(-50%, -50%);
+            transform: translate(-50%, -50%);
+        }
     </style>
 </head>
-<body touchstart="screenPressed()">
+<body>
 
 <!-- </body> onkeydown=""> -->
     <!-- onkeydown="keyWasPressed(event)" -->
@@ -44,88 +53,20 @@
     will be as cross platform as it can get at that point. And the future will bring more ease of adding new controls/signals/outside interactions -->
 
 <p id="canvasLocation"></p>
-<p id="e1"></p>
+<p id="belowCanvas"></p>
 <!-- make the button dissapear after pressing start -->
 <button id="startButton" touchstart="this.onclick.call();" onclick="startGame(); document.body.setAttribute('onkeydown', 'keyWasPressed(event)'); document.body.setAttribute('onkeyup', 'keyWasReleased(event)'); this.style.display='none'"> Start Game </button>
 <!-- document.getElementById('tagName').setAttribute('onkeydown', 'keyWasPressed(event)'); This allows key presses to be listed for after start is pressed-->
 <!-- ontouchstart='screenWasTouched(event)';  -->
 
-<p>Hello</p>
+
+<button id="accelButton" touchstart="this.onmousedown.call();" onmousedown="accelButton('Pressed')" touchend="this.onmouseup.call();" onmouseup="accelButton('Released');">Accelerate Up</button>
+
+
+
+<!-- <p>Hello</p> -->
 
 <script>
-
-function screenPressed() {
-    me_ThePlayer1CharacterHero.tryingToForceLiftObjUp = true;
-    document.body.appendChild(document.createElement("P").innerHTML = "screen touched");
-}
-
-// execute button.onclick.call() to treat a touch event on a button the same as a mouse click
-// document.getElementById("startButton").setAttribute('touchstart', function(event) {
-//     // document.getElementById("e1").innerHTML = "Button touched";
-//     // document.write("start button touched");
-//     document.getElementById("startButton").onclick.call(); // = true;
-// }, false);
-
-
-
-// document.getElementById('touchable').addEventListener('touchstart', function(ev) {      if (ev.touches.item(0) == ev.targetTouches.item(0))
-
-// document.body.addEventListener('touchstart', function(event) { 
-//     // document.write("Screen was touched");
-//     // when I tap the screen, I want to accelerate the objects up
-//     me_ThePlayer1CharacterHero.tryingToForceLiftObjUp = true;
-
-    // if (event.touches.item(0) == event.targetTouches.item(0)) {
-    //     /**
-    //      * If the first touch on the surface is also targeting the
-    //      * "touchable" element, the code below should execute.
-    //      * Since targetTouches is a subset of touches which covers the
-    //      * entire surface, TouchEvent.touches >= TouchEvents.targetTouches
-    //      * is always true.
-    //      */          
-    //      document.write('Hello Touch Events!');
-    // }      
-    // if (ev.touches.length == ev.targetTouches.length) {
-    //     /**
-    //      * If all of the active touch points are on the "touchable"
-    //      * element, the length properties should be the same.
-    //      */         
-    //      document.write('All points are on target element')
-    // }     
-    // if (ev.touches.length > 1) {
-    //     /**
-    //      * On a single touch input device, there can only be one point
-    //      * of contact on the surface, so the following code can only
-    //      * execute when the terminal supports multiple touches.
-    //      */          
-    //     document.write('Hello Multiple Touch!');
-    // }  
-//     }, false);
-
-// document.getElementById('touchable').addEventListener('touchend', function(ev) 
-//     {     
-//         me_ThePlayer1CharacterHero.tryingToForceLiftObjUp = false;
-
-        /**
-       * Example output when three touch points are on the surface,
-       * two of them being on the "touchable" element and one point
-       * in the "touchable" element is lifted from the surface:
-       *
-       * Touch points removed: 1
-       * Touch points left on element: 1
-       * Touch points left on document: 2
-        */ 
-    //     document.write('Removed: ' + ev.changedTouches.length);
-    //   document.write('Remaining on element: ' + ev.targetTouches.length);
-    //   document.write('Remaining on document: ' + ev.touches.length);  
-    
-    // }, false);
-
-
-// function screenWasTouched(event) {
-
-
-// }
 
 
 var hero = null;
@@ -262,6 +203,15 @@ function me_ThePlayer1CharacterHero(x=0, y=0, z=3.6*4440, hipRotationY=0, leftAr
 // I would also like to start working on propelling objects forward, with accurate forces applied.
 // In order to maintain a strong forceful low density element throw, like with air or fire, I will need to hold the force acceleration the entire time
 // With elements like rock, metal, ice, etc, I 
+
+function accelButton(action) {
+    if (action == "Pressed") {
+        me_ThePlayer1CharacterHero.tryingToForceLiftObjUp = true;
+    } else if (action == "Released") {
+        me_ThePlayer1CharacterHero.tryingToForceLiftObjUp = false;
+    }
+    
+}
 
 
 // When I press the d key, I would like to increase the vertical acceleration on the circle ball1
