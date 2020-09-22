@@ -60,11 +60,11 @@
 <!-- ontouchstart='screenWasTouched(event)';  -->
 
 
-<button id="accelButton" touchstart="this.onclick.call();" onclick="accelButton('Pressed')" touchend="accelButton('Released');">Accelerate Up</button>
+<button id="accelButton" touchstart="accelButton('Pressed')" onmousedown="accelButton('Pressed')" touchend="accelButton('Released');" onmouseup="accelButton('Released');">Accelerate Up</button>
 <!-- onmouseup="accelButton('Released'); -->
 
 
-<p>Hello</p>
+<p>Hello WOrld</p>
 
 <script>
 
