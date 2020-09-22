@@ -12,15 +12,22 @@
         html {
             /* -moz-user-select: none; */
             -webkit-user-select: none; /*disable holding and selecting/highlighting objects on the page*/
+            -moz-user-select: none;
             touch-action:none;
         }
         body {
             -webkit-user-select: none; /*disable holding and selecting/highlighting objects on the page*/
+            -moz-user-select: none;
             touch-action:none;
         }
         canvas {
             border: 1px solid #d3d3d3;
             background-color: #f1f1f1;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            touch-action:none;
+        }
+        p {
             -webkit-user-select: none;
             -moz-user-select: none;
             touch-action:none;
