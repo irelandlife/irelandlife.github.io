@@ -5,7 +5,8 @@
     <title>Mastering of the Elements Game</title>
     <meta name="description" content="A unique and beautiful idea for a game that lets you master the elements of the universe!">
     <meta name="author" content="Robert Ireland">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <!-- <meta name="viewport" content="width=device-width, initial-scale=1.0"/> -->
 
     <style>
         canvas {
@@ -35,7 +36,7 @@
     </style>
 </head>
 <body>
-<p>hello</p>
+
 <!-- </body> onkeydown=""> -->
     <!-- onkeydown="keyWasPressed(event)" -->
 
@@ -49,21 +50,24 @@
 <!-- document.getElementById('tagName').setAttribute('onkeydown', 'keyWasPressed(event)'); This allows key presses to be listed for after start is pressed-->
 <!-- ontouchstart='screenWasTouched(event)';  -->
 
-
+<p>Hello safari iphone</p>
 
 <script>
+
 document.getElementById("startButton").setAttribute('touchstart', function(event) {
-    document.getElementById("e1").innerHTML = "Button touched";
+    // document.getElementById("e1").innerHTML = "Button touched";
+    // document.write("start button touched");
     document.getElementById("startButton").onclick.call(); // = true;
 }, false);
 
+
+
 // document.getElementById('touchable').addEventListener('touchstart', function(ev) {      if (ev.touches.item(0) == ev.targetTouches.item(0))
-document.body.addEventListener('touchstart', function(event) { 
-    // document.write("Screen was touched");
-    // when I tap the screen, I want to accelerate the objects up
-    me_ThePlayer1CharacterHero.tryingToForceLiftObjUp = true;
 
-
+// document.body.addEventListener('touchstart', function(event) { 
+//     // document.write("Screen was touched");
+//     // when I tap the screen, I want to accelerate the objects up
+//     me_ThePlayer1CharacterHero.tryingToForceLiftObjUp = true;
 
     // if (event.touches.item(0) == event.targetTouches.item(0)) {
     //     /**
@@ -90,11 +94,11 @@ document.body.addEventListener('touchstart', function(event) {
     //      */          
     //     document.write('Hello Multiple Touch!');
     // }  
-    }, false);
+//     }, false);
 
-document.getElementById('touchable').addEventListener('touchend', function(ev) 
-    {     
-        me_ThePlayer1CharacterHero.tryingToForceLiftObjUp = false;
+// document.getElementById('touchable').addEventListener('touchend', function(ev) 
+//     {     
+//         me_ThePlayer1CharacterHero.tryingToForceLiftObjUp = false;
 
         /**
        * Example output when three touch points are on the surface,
@@ -109,7 +113,7 @@ document.getElementById('touchable').addEventListener('touchend', function(ev)
     //   document.write('Remaining on element: ' + ev.targetTouches.length);
     //   document.write('Remaining on document: ' + ev.touches.length);  
     
-    }, false);
+    // }, false);
 
 
 // function screenWasTouched(event) {
