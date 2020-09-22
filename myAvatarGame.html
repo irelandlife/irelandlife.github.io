@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
 <head>
     <meta charset="utf-8">
     <title>Mastering of the Elements Game</title>
@@ -42,40 +42,39 @@
             -ms-transform: translate(-50%, -50%);
             transform: translate(-50%, -50%);
         }
+        html {
+            -webkit-tap-highlight-color: rgba(0,0,0,0);
+        }
     </style>
 </head>
 <body>
 
-<!-- </body> onkeydown=""> -->
-    <!-- onkeydown="keyWasPressed(event)" -->
-
-    <!-- I'm first going to try and make as much of this game in canvas since I will be able to have almost all the control that I want, and it
-    will be as cross platform as it can get at that point. And the future will bring more ease of adding new controls/signals/outside interactions -->
-<p id="canvasLocation" ontouchstart="accelButton('Pressed');" ontouchend="accelButton('Released');"></p>
+<!-- I'm first going to try and make as much of this game in canvas since I will be able to have almost all the control that I want, and it
+will be as cross platform as it can get at that point. And the future will bring more ease of adding new controls/signals/outside interactions -->
+<p id="canvasLocation" ontouchstart="touchAccelerate('Pressed');" ontouchend="touchAccelerate('Released');"></p>
 <p id="belowCanvas"></p>
 <!-- make the button dissapear after pressing start -->
 <button id="startButton" touchstart="this.onclick.call();" onclick="startGame(); document.body.setAttribute('onkeydown', 'keyWasPressed(event)'); document.body.setAttribute('onkeyup', 'keyWasReleased(event)'); this.style.display='none'"> Start Game </button>
 <!-- document.getElementById('tagName').setAttribute('onkeydown', 'keyWasPressed(event)'); This allows key presses to be listed for after start is pressed-->
-<!-- ontouchstart='screenWasTouched(event)';  -->
-
 <!-- <button id="accelButton" ontouchstart="accelButton('Pressed');" ontouchend="accelButton('Released');" >Accelerate Up</button> -->
 <!-- <button id="accelButton" ontouchstart="accelButton('Pressed'); console.log('ontouchstart');" ontouchend="accelButton('Released'); console.log('ontouchend');" >Accelerate Up</button> -->
-
-
-
-<!-- <p>Hello</p> -->
+<p>Hello</p>
 
 
 <script>
 
+document.addEventListener('contextmenu', event => event.preventDefault()); 
+
+// document.addEventListener("ontouchstart", function(){}, true);
+// document.addEventListener("touchstart", function(){}, true);
+
 // var action = 1;
-function accelButton(action='Pressed') {
+function touchAccelerate(action='Pressed') {
     if (action == "Pressed") {
         me_ThePlayer1CharacterHero.tryingToForceLiftObjUp = true;
     } else if (action == "Released") {
         me_ThePlayer1CharacterHero.tryingToForceLiftObjUp = false;
-    }
-    
+    }   
 }
 
 
