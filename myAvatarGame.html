@@ -43,7 +43,7 @@
     will be as cross platform as it can get at that point. And the future will bring more ease of adding new controls/signals/outside interactions -->
 
 <p id="canvasLocation"></p>
-<p></p>
+<p id="e1"></p>
 <!-- make the button dissapear after pressing start -->
 <button id="startButton" onclick="startGame(); document.body.setAttribute('onkeydown', 'keyWasPressed(event)'); document.body.setAttribute('onkeyup', 'keyWasReleased(event)'); this.style.display='none'"> Start Game </button>
 <!-- document.getElementById('tagName').setAttribute('onkeydown', 'keyWasPressed(event)'); This allows key presses to be listed for after start is pressed-->
@@ -53,6 +53,7 @@
 
 <script>
 document.getElementById("startButton").setAttribute('touchstart', function(event) {
+    document.getElementById("e1").innerHTML = "Button touched";
     document.getElementById("startButton").onclick.call(); // = true;
 }, false);
 
