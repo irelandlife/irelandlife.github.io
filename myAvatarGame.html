@@ -21,7 +21,7 @@
             touch-action:none;
         }
         canvas {
-            border: 1px solid #d3d3d3;
+            /* border: 1px solid #d3d3d3; */
             background-color: #f1f1f1;
             -webkit-user-select: none;
             -moz-user-select: none;
@@ -36,14 +36,14 @@
             /* margin-top: 20px; */
             /* margin-left: 4.5%; */
             position: absolute;
-            top: 15px;/*50%;*/
-            left: 50%;
+            /* top: 15px;50%; */
+            /* left: 50%; */
             -webkit-user-select: none;
             -moz-user-select: none;
             touch-action:none;
-            -ms-transform: translate(-50%, 0%);
+            /* -ms-transform: translate(-50%, 0%); */
             /* , -50%); */
-            transform: translate(-50%, 0%);
+            /* transform: translate(-50%, 0%); */
             /* , -50%); */
         }
         #startButton {
@@ -63,8 +63,8 @@
             /* top: 50%; */
             bottom: 5%;
             left: 60%;
-            -ms-transform: translate(-50%, -50%);
-            transform: translate(-50%, -50%);
+            /* -ms-transform: translate(-50%, -50%);
+            transform: translate(-50%, -50%); */
         }
     </style>
 </head>
@@ -72,8 +72,10 @@
 <!-- <center> -->
 <!-- I'm first going to try and make as much of this game in canvas since I will be able to have almost all the control that I want, and it
 will be as cross platform as it can get at that point. And the future will bring more ease of adding new controls/signals/outside interactions -->
+
 <p id="canvasLocation" ontouchstart="touchAccelerate('Pressed');" ontouchend="touchAccelerate('Released');"></p>
-<p id="belowCanvas"></p>
+
+<!-- <p id="belowCanvas"></p> -->
 <!-- make the button dissapear after pressing start -->
 <button id="startButton" touchstart="this.onclick.call();" onclick="startGame(); document.body.setAttribute('onkeydown', 'keyWasPressed(event)'); document.body.setAttribute('onkeyup', 'keyWasReleased(event)'); this.style.display='none'"> Start Game </button>
 <!-- document.getElementById('tagName').setAttribute('onkeydown', 'keyWasPressed(event)'); This allows key presses to be listed for after start is pressed-->
@@ -598,25 +600,25 @@ function heroDistanceToObj_m(obj) {
 }
 
 
-var screenHeightPercent = 0.70;
-var screenWidthPercent = 0.90;
+// var screenHeightPercent = 1;//0.70;
+// var screenWidthPercent = 1;//0.90;
 
 // In the myGameArea obj, there's an interval which will run the updateGameArea() 
 // function every 20th millisecond (50 times per second). Also there's a function called clear(), that clears the entire canvas.
 var myGameArea = {
-    canvasHeight : screenHeightPercent*screen.availHeight,
-    canvasWidth : screenWidthPercent*screen.width,
+    canvasHeight : screen.availHeight-135, // screenHeightPercent*screen.availHeight,
+    canvasWidth : screen.availWidth-15, // screenWidthPercent*screen.width,
     canvas : document.createElement("canvas"),
     start : function() {
-        this.canvas.width = screenWidthPercent*screen.width;
-        this.canvas.height = screenHeightPercent*screen.availHeight;
+        this.canvas.height = screen.availHeight-135; //screenHeightPercent*screen.availHeight;
+        this.canvas.width = screen.availWidth-15; //screenWidthPercent*screen.width;
         this.context = this.canvas.getContext("2d");
         document.getElementById("canvasLocation").appendChild(this.canvas);
         // create a timer with setInterval that triggers updateGameArea() to get called every 20ms (50FPS)
         this.interval = setInterval(updateGameArea, _50FPS);
     },
     clear : function() {
-        this.context.clearRect(0, 0, this.canvas.width, this.canvas.height); // clear the entire canvas
+        this.context.clearRect(0, 0, this.canvasWidth, this.canvasHeight); // clear the entire canvas
     }
 }
 
