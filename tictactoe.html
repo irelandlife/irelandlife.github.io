@@ -38,6 +38,7 @@
     <!-- <style class="INLINE_PEN_STYLESHEET_ID"> -->
     <style>
       body {
+        background-color: darkgray;
     font: 20px "Century Gothic", Futura, sans-serif;
     margin: 30px;
     display: block;  /* prevents scrollbar */
@@ -47,6 +48,11 @@
   
   ol, ul {
     padding-left: 30px;
+  }
+
+  button {
+    font: 20px "Century Gothic", Futura, sans-serif;
+    background-color:azure;
   }
   
   .board-row:after {
@@ -109,7 +115,7 @@
     padding: 20px;
     white-space: pre-wrap;
   "></div>
-  <div id="root"><div class="game"><div class="game-board"><div><div class="board-row"><button class="square"></button><button class="square"></button><button class="square"></button></div><div class="board-row"><button class="square"></button><button class="square"></button><button class="square"></button></div><div class="board-row"><button class="square"></button><button class="square"></button><button class="square"></button></div></div></div><div class="game-info"><div>Next player: X</div><ol><li><button>Play again</button></li><li><button>Go to move #1</button></li></ol></div></div></div>
+  <div id="root"><div class="game"><div class="game-board"><div><div class="board-row"><button class="square"></button><button class="square"></button><button class="square"></button></div><div class="board-row"><button class="square"></button><button class="square"></button><button class="square"></button></div><div class="board-row"><button class="square"></button><button class="square"></button><button class="square"></button></div></div></div><div class="game-info"><div>Next player: X</div><ol><li><button>Play again</button></li><li><button>Move #1</button></li></ol></div></div></div>
   <!-- <div id="root"><div class="game"><div class="game-board"><div><div class="board-row"><button class="square"></button><button class="square"></button><button class="square"></button></div><div class="board-row"><button class="square"></button><button class="square"></button><button class="square"></button></div><div class="board-row"><button class="square"></button><button class="square"></button><button class="square"></button></div></div></div><div class="game-info"><div>Next player: X</div><ol><li><button>Go to game start</button></li><li><button>Go to move #1</button></li></ol></div></div></div> -->
   <script>
   window.addEventListener('mousedown', function(e) {
@@ -244,7 +250,7 @@
       var winner = calculateWinner(current.squares);
       var moves = history.map(function (step, move) {
         var desc = move ?
-        'Go to move #' + move :
+        'Move #' + move :
         'Play again';
         // 'Go to game start';
         return React.createElement("li", { key: move },
