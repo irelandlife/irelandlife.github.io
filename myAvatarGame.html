@@ -96,9 +96,9 @@ function startGame() {
     hero = me_ThePlayer1CharacterHero;
 
     // create a few game objs
-    block1 = new blockComponent(0.15 * myGameArea.canvas.width, 200, 0, 30, 30, "red", 40, "fire");
-    block2 = new blockComponent(0.45 * myGameArea.canvas.width, 200, 0, 50, 50, "gray", 50, "metal");
-    ball1 = new ballComponent(0.95 * myGameArea.canvas.width, 200, 0, 100, "blue", true, 80, "water");
+    block1 = new blockComponent(0.15 * myGameArea.canvas.width, 200, 0, 30, 30, "red", 130, "fire");
+    block2 = new blockComponent(0.45 * myGameArea.canvas.width, 200, 0, 50, 50, "gray", 150, "metal");
+    ball1 = new ballComponent(0.95 * myGameArea.canvas.width, 200, 0, 100, "blue", true, 170, "water");
 
     controllableGameObjs["block1"] = block1;
     controllableGameObjs["block2"] = block2;
@@ -592,7 +592,7 @@ var myGameArea = {
 
         this.context = this.canvas.getContext("2d");
         // create a timer with setInterval that triggers updateGameArea() to get called every 20ms (50FPS)
-        this.interval = setInterval(updateGameArea, _50FPS);
+        this.interval = setInterval(updateGameArea, frameSpeed_ms);
         // If I want to keep track of the mouse's x and y position, I can use the following function and store the values in the var's x and y vars
         window.addEventListener('mousemove', function (e) {
             myGameArea.x = e.pageX;
@@ -604,6 +604,7 @@ var myGameArea = {
     }
 }
 
+// var _83p3FPS = 12;
 var _50FPS = 20; // 1/(20*10^-3) == 50 FPS // 20 represents 20ms
 // var _40FPS = 25;
 // var _30FPS = 33.3;
