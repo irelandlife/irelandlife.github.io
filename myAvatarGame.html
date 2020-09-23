@@ -96,9 +96,9 @@ function startGame() {
     hero = me_ThePlayer1CharacterHero;
 
     // create a few game objs
-    block1 = new blockComponent(0.15 * myGameArea.canvasWidth, 200, 0, 30, 30, "red", 40, "fire");
-    block2 = new blockComponent(0.45 * myGameArea.canvasWidth, 200, 0, 50, 50, "gray", 50, "metal");
-    ball1 = new ballComponent(0.95 * myGameArea.canvasWidth, 200, 0, 100, "blue", true, 80, "water");
+    block1 = new blockComponent(0.15 * myGameArea.canvas.width, 200, 0, 30, 30, "red", 40, "fire");
+    block2 = new blockComponent(0.45 * myGameArea.canvas.width, 200, 0, 50, 50, "gray", 50, "metal");
+    ball1 = new ballComponent(0.95 * myGameArea.canvas.width, 200, 0, 100, "blue", true, 80, "water");
 
     controllableGameObjs["block1"] = block1;
     controllableGameObjs["block2"] = block2;
@@ -421,7 +421,7 @@ function forces_y(obj) {
     // of pixels per meter (4440 pixels/meter)
     // Changing the 800 value to something else should create different zoom effects
     // Determine what the length of the object is on the screen.
-    obj.sizeOnScreen_px = 800/(Math.max(distanceFromHeroToObj_m, 0.5)); // this should be pixels/m where the result is in pixels
+    obj.sizeOnScreen_px = (obj.originalSizeOnScreen_px/200)*800/(Math.max(distanceFromHeroToObj_m, 0.5)); // this should be pixels/m where the result is in pixels
     // As the distance to the object increases, I need it's size on the screen to decrease.
 
     var objHeightOnScreen_y_px = 0;
@@ -445,6 +445,7 @@ function forces_y(obj) {
 }
 
 // This controls the movement and speed of the objects in the left/R direction
+// This number needs to decrease with distance
 function sumOfForces_x(obj) {
     if (me_ThePlayer1CharacterHero.tryingToForceObjLeft == true) {
         obj.x -= 10; // units of pixels
@@ -456,9 +457,9 @@ function sumOfForces_x(obj) {
 // This determines the z position of the objects (how far/close they are to me).
 function sumOfForces_z(obj) {
     if (me_ThePlayer1CharacterHero.tryingToForceObjForward == true) {
-        obj.z -= 10; // -z to move obj forward. The object's size on the screen is auto determined in the forces_y() function since it checks for obj distance
+        obj.z -= 100; // -z to move obj forward. The object's size on the screen is auto determined in the forces_y() function since it checks for obj distance
     } else if (me_ThePlayer1CharacterHero.tryingToForceObjBack == true) {
-        obj.z += 10;
+        obj.z += 100;
     }
 }
 
@@ -500,6 +501,7 @@ function ballComponent(x=300, y=400, z=0, radius=100, color="blue", filled=true,
     // this.objMetersAboveGround = function() {return metersPerPixel*(myGameArea.canvasHeight-this.y-2*this.radius);};
     this.objMetersAboveGround = (myGameArea.canvasHeight-this.y)*metersPerPixel;
     this.radius = radius;
+    this.originalSizeOnScreen_px = this.radius*2;//*metersPerPixel;
     this.sizeOnScreen_px = this.radius*2;
     // this.objHeight = function() {return this.y + this.radius;};
     this.filled = filled;
@@ -538,6 +540,7 @@ function blockComponent(x=200, y=300, z=0, width, height, color, mass=100, eleme
     this.x = x;
     this.y = y;
     this.z = z;
+    this.originalSizeOnScreen_px = this.height;//*metersPerPixel;
     this.sizeOnScreen_px = this.height;
     this.objMetersAboveGround = (myGameArea.canvasHeight-this.y) * metersPerPixel; //function() {return metersPerPixel*(myGameArea.canvasHeight-this.y);};
     this.color = color;
