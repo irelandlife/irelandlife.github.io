@@ -5,12 +5,15 @@
     <title>Mastering of the Elements Game</title>
     <meta name="description" content="A unique and beautiful idea for a game that lets you master the elements of the universe!">
     <meta name="author" content="Robert Ireland">
-    <meta name="viewport" content="width=device-width, user-scalable=no"/> <!-- <meta name="viewport" content = "width = device-width, height=device-height, initial-scale = 1.0, minimum-scale = 1, maximum-scale = 1, user-scalable=no" /> -->
+    <meta name="viewport" content="width=device-width, user-scalable=no"/> <!-- <meta name="viewport" content = "width = device-width, height=device-height, initial-scale = 1.0, minimum-scale = 1, maximum-scale = 1, user-scalable=no" /> --> <!-- user-scalable=no was needed for to disabling zooming on the ios -->
     
     <!-- //App name -->
     <meta name="apple-mobile-web-app-title" content="Element Bending" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
-    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <!-- black-translucent -->
+    <!-- default -->
+    <!-- black -->
 
     <!-- //APP ICONS 
     <link rel="apple-touch-icon" href="/img/icon.png">
@@ -574,22 +577,16 @@ function blockComponent(x=200, y=300, z=0, width, height, color, mass=100, eleme
     }
 }
 
+// This is the distance the hero is from the object
 function heroDistanceToObj_m(obj) {
-    // return Math.max(obj.z - hero.z, 5);
     return metersPerPixel * Math.sqrt((obj.x-hero.x)**2 + (obj.y-hero.y)**2 + (obj.z-hero.z)**2);//**0.5;
 }
 
-
-// var screenHeightPercent = 1;//0.70;
-// var screenWidthPercent = 1;//0.90;
-
-
-
+// On a desktop, the user might resize the window. The canvas width and heights needs to be updated in that case.
 function resize(canvas) {
     // Lookup the size the browser is displaying the canvas.
     var displayWidth = canvas.clientWidth;
     var displayHeight = canvas.clientHeight;
-    
     // Check if the canvas is not the same size.
     if (canvas.width != displayWidth || canvas.height != displayHeight) {
         // Make the canvas the same size
@@ -598,32 +595,21 @@ function resize(canvas) {
     }
 }
 
-
-// myGameArea.canvasHeight
-// myGameArea.canvasWidth
-
 // In the myGameArea obj, there's an interval which will run the updateGameArea() 
 // function every 20th millisecond (50 times per second). Also there's a function called clear(), that clears the entire canvas.
 var myGameArea = {
-    // canvas : document.createElement("canvas"),
     canvas : document.getElementById("canvas"),
-    canvasHeight : this.canvas.clientHeight, //this.canvas.height, ///300, //screen.height, //availHeight, // screenHeightPercent*screen.availHeight,
-    canvasWidth : this.canvas.clientWidth, //this.canvas.width, //300, //screen.width, //availWidth, // screenWidthPercent*screen.width,
+    canvasHeight : this.canvas.clientHeight,
+    canvasWidth : this.canvas.clientWidth,
     start : function() {
         // I need to update the canvas.width and canvas.height to the canvas.clientWidth and canvas.clientHeight if the user changes the size of their window
         this.canvas.height = this.canvas.clientHeight;
         this.canvas.width = this.canvas.clientWidth;
 
-
-        console.log(this.canvas.height);
-        console.log(this.canvas.width);
-
         this.context = this.canvas.getContext("2d");
-        // document.getElementById("canvasLocation").appendChild(this.canvas);
-
-
         // create a timer with setInterval that triggers updateGameArea() to get called every 20ms (50FPS)
         this.interval = setInterval(updateGameArea, _50FPS);
+        // If I want to keep track of the mouse's x and y position, I can use the following function and store the values in the var's x and y vars
         window.addEventListener('mousemove', function (e) {
             myGameArea.x = e.pageX;
             myGameArea.y = e.pageY;
@@ -632,27 +618,15 @@ var myGameArea = {
     clear : function() {
         this.context.clearRect(0, 0, this.canvas.width, this.canvas.height); // clear the entire canvas
     }
-    // this.canvas.height = screen.availHeight-135; //screenHeightPercent*screen.availHeight;
-    // this.canvas.width = screen.availWidth-15; //screenWidthPercent*screen.width;
 }
 
-
-var _50FPS = 20; // 1/(20*10^-3) == 50 FPS == 1/20ms
+var _50FPS = 20; // 1/(20*10^-3) == 50 FPS // 20 represents 20ms
 // var _40FPS = 25;
 // var _30FPS = 33.3;
+var frameSpeed_ms = _50FPS;
 
-// var deltaTime = _50FPS*10**-3; // 20ms // 0.020
-var deltaTime = 0.020; // 20ms // 0.020sec
-
-
-// fillRect(x, y, width, height)
-// Draws a filled rectangle.
-// strokeRect(x, y, width, height)
-// Draws a rectangular outline.
-// clearRect(x, y, width, height)
-// Clears the specified rectangular area, making it fully transparent.
+var deltaTime = frameSpeed_ms * 10**-3; //0.020; // 20ms // 0.020sec // var deltaTime = _50FPS*10**-3; // 20ms // 0.020
 
 </script>
-<!-- </center> -->
 </body>
 </html>
