@@ -446,20 +446,28 @@ function forces_y(obj) {
 
 // This controls the movement and speed of the objects in the left/R direction
 // This number needs to decrease with distance
+// This is based on the force being applied and the distance of the object to the player
+// Force increases speed. Distance away decreases speed
 function sumOfForces_x(obj) {
+    var myElementalPowerRating = me_ThePlayer1CharacterHero.myElementSkillSet[obj.elementType];
+    var maxElementalForce = myElementalPowerRating * me_ThePlayer1CharacterHero.maxMassToBeForceHeld[obj.elementType] * me_ThePlayer1CharacterHero.massControlPercent;
     if (me_ThePlayer1CharacterHero.tryingToForceObjLeft == true) {
-        obj.x -= 10; // units of pixels
+        // obj.x -= maxElementalForce / (800 * Math.max(heroDistanceToObj_m(obj), 0.1)); // units of pixels
+        obj.x -= maxElementalForce / (1 * Math.max(heroDistanceToObj_m(obj), 4)**2); // units of pixels
     } else if (me_ThePlayer1CharacterHero.tryingToForceObjRight == true) {
-        obj.x += 10;
+        // obj.x += maxElementalForce / (800 * Math.max(heroDistanceToObj_m(obj), 0.1));
+        obj.x += maxElementalForce / (1 * Math.max(heroDistanceToObj_m(obj), 4)**2);
     }
 }
 
 // This determines the z position of the objects (how far/close they are to me).
 function sumOfForces_z(obj) {
+    var myElementalPowerRating = me_ThePlayer1CharacterHero.myElementSkillSet[obj.elementType];
+    var maxElementalForce = myElementalPowerRating * me_ThePlayer1CharacterHero.maxMassToBeForceHeld[obj.elementType] * me_ThePlayer1CharacterHero.massControlPercent;
     if (me_ThePlayer1CharacterHero.tryingToForceObjForward == true) {
-        obj.z -= 100; // -z to move obj forward. The object's size on the screen is auto determined in the forces_y() function since it checks for obj distance
+        obj.z -= maxElementalForce / (1 * Math.max(heroDistanceToObj_m(obj), 4)**2); // units of pixels // -z to move obj forward. The object's size on the screen is auto determined in the forces_y() function since it checks for obj distance
     } else if (me_ThePlayer1CharacterHero.tryingToForceObjBack == true) {
-        obj.z += 100;
+        obj.z += maxElementalForce / (1 * Math.max(heroDistanceToObj_m(obj), 4)**2); // units of pixels
     }
 }
 
