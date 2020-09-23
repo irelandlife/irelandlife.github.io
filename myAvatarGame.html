@@ -85,8 +85,6 @@ function touchAccelerate(action='Pressed') {
 // Future: I need to be able to control a specific object, a group of objects, or a large sum of objects separately
 // Future: As I move near objects, I need to be able to control them quickly
 // Issue #6: Moving the ball forward and backward isn't working, and might have an issue
-// Feature: I would like to add translucent buttons to the screen that can be pressed/held to do certain things...like hold or smash down
-// Feature: I would like to trigger a haptic feedback vibration when the ball hits the ground. window.navigator.vibrate(100); // 100ms
 
 var hero = null;
 
@@ -429,13 +427,8 @@ function forces_y(obj) {
     var objHeightOnScreen_y_px = 0;
     // now I can update objHeight_y and velocity if they aren't going to hit the ground. Otherwise, I need to draw them on the ground
     if (predictedFinalPosition_y_m <= 0) {
-        // trigger vibration upon impact
-        if (predictedFinalPosition_y_m < objMetersAboveGround_y + 0.5*sumOfAccelerations_y*(deltaTime**2)) {
-            window.navigator.vibrate(100);
-            // console.log("vibrate");
-        }
-        // var numPixelsAboveGround = 1;
-        objHeightOnScreen_y_px = myGameArea.canvas.height;// - numPixelsAboveGround;
+        var numPixelsAboveGround = 1;
+        objHeightOnScreen_y_px = myGameArea.canvas.height - numPixelsAboveGround;
         finalVelocity_y = 0;
         predictedFinalPosition_y_m = 0;
     } else { // if the object is above the ground, determine where on the screen it should be located given how far away it is
