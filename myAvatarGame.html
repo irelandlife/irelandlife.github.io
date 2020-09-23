@@ -5,16 +5,12 @@
     <title>Mastering of the Elements Game</title>
     <meta name="description" content="A unique and beautiful idea for a game that lets you master the elements of the universe!">
     <meta name="author" content="Robert Ireland">
-    <!-- <meta name="viewport" content = "width = device-width, height=device-height, initial-scale = 1.0, minimum-scale = 1, maximum-scale = 1, user-scalable=no" /> -->
-    <meta name="viewport" content="width=device-width, user-scalable=no"/>
+    <meta name="viewport" content="width=device-width, user-scalable=no"/> <!-- <meta name="viewport" content = "width = device-width, height=device-height, initial-scale = 1.0, minimum-scale = 1, maximum-scale = 1, user-scalable=no" /> -->
     
-
     <!-- //App name -->
     <meta name="apple-mobile-web-app-title" content="Element Bending" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black" />
-
-
 
     <!-- //APP ICONS 
     <link rel="apple-touch-icon" href="/img/icon.png">
@@ -22,27 +18,11 @@
     <link rel="apple-touch-icon" sizes="120x120" href="/img/icon.png">
     <link rel="apple-touch-icon" sizes="152x152" href="/img/icon.png"> -->
 
-
     <style>
-        /* html {
-            -webkit-user-select: none;
-            -moz-user-select: none;
-            touch-action:none;
-        } */
-        /* the following 5 css settings are essential
-        body {
-            margin: 0;
-            background-color: white;
-        }
-        canvas {
-            display: block;
-            width: 100vw;
-            height: 100vh;
-        } */
-
         body {
             margin: 0;
             background-color: rgb(226, 226, 226);
+            /* touch-action:none; not sure why I need this initially */
         }
         canvas {
             display: block;  /* prevents scrollbar */
@@ -56,120 +36,39 @@
             left: 50%;
             -ms-transform: translate(-50%, -50%);
             transform: translate(-50%, -50%);
-        }
-
-        /* body {
-            background-color: #f1f1f1f5;
-            -webkit-user-select: none;
-            -moz-user-select: none;
-            touch-action:none;
-        }
-        canvas {
-            border: 1px solid #d3d3d3;
-            background-color:rgb(153, 157, 161);
-            -webkit-user-select: none;
-            -moz-user-select: none;
-            touch-action:none;
-        } */
-        /* p {
-            -webkit-user-select: none;
-            -moz-user-select: none;
-            touch-action:none;
-        } */
-        /* #canvasLocation { */
-            /* margin-top: 20px; */
-            /* margin-left: 4.5%; */
-            /* position: absolute; */
-            /* top: 15px;50%; */
-            /* left: 50%; */
-            /* -webkit-user-select: none;
-            -moz-user-select: none;
-            touch-action:none; */
-            /* -ms-transform: translate(-50%, 0%); */
-            /* , -50%); */
-            /* transform: translate(-50%, 0%); */
-            /* , -50%); */
-        /* } */
-        /* #startButton { */
-            /* margin: 10px; */
-            /* position: absolute; */
-            /* top: 50%; */
-            /* bottom: 20%;
-            left: 50%;
+            /* disable highlighting the text on the button with long button touch/press/hold */
             -webkit-user-select: none; 
             -moz-user-select: none;
-            -ms-transform: translate(-50%, -50%);
-            transform: translate(-50%, -50%);
-        } */
-        /* #accelButton { */
-            /* margin: 10px;
-            position: absolute; */
-            /* top: 50%; */
-            /* bottom: 5%;
-            left: 60%; */
-            /* -ms-transform: translate(-50%, -50%);
-            transform: translate(-50%, -50%); */
-        /* } */
-        /* canvas.full {
-            width: 100%;
-            height: 100%;
-            /* Other fullscreen CSS 
+        }
+        /* the following 5 css settings are (annoyingly) essential
+        body {
+            margin: 0;
+            background-color: white;
+        }
+        canvas {
+            display: block;
+            width: 100vw;
+            height: 100vh;
         } */
     </style>
 </head>
 <body>
-<!-- <center> -->
 <!-- I'm first going to try and make as much of this game in canvas since I will be able to have almost all the control that I want, and it
 will be as cross platform as it can get at that point. And the future will bring more ease of adding new controls/signals/outside interactions -->
 
 <!-- <canvas id="canvasLocation" ontouchstart="touchAccelerate('Pressed');" ontouchend="touchAccelerate('Released');"></canvas>-->
 <canvas id="canvas" ontouchstart="touchAccelerate('Pressed');" ontouchend="touchAccelerate('Released');"></canvas>
 
-<!-- <p id="belowCanvas"></p> -->
 <!-- make the button dissapear after pressing start -->
-
 <button id="startButton" touchstart="this.onclick.call();" onclick="startGame(); document.body.setAttribute('onkeydown', 'keyWasPressed(event)'); document.body.setAttribute('onkeyup', 'keyWasReleased(event)'); this.style.display='none'"> Start Game </button>
 
-
-
-<!-- document.getElementById('tagName').setAttribute('onkeydown', 'keyWasPressed(event)'); This allows key presses to be listed for after start is pressed-->
-<!-- <button id="accelButton" ontouchstart="accelButton('Pressed');" ontouchend="accelButton('Released');" >Accelerate Up</button> -->
-<!-- <button id="accelButton" ontouchstart="accelButton('Pressed'); console.log('ontouchstart');" ontouchend="accelButton('Released'); console.log('ontouchend');" >Accelerate Up</button> -->
 <!-- <p>Hello</p> -->
-
 <!-- <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script> -->
+
 <script>
 
-// var settings = $("#metaset").attr("content");
-// $("body").click(function() {
-//     if ($(this).hasClass("full")) {
-//         $(this).removeClass("full");
-//         $("meta").attr("content",settings+"user-scalable=yes");
-//     } else {
-//         $(this).addClass("full");
-//         $("meta").attr("content",settings+"user-scalable=no");
-//     }
-// });
-
-// If I have links that I want to click to transition within the app, I can just uncomment the following
-// <script type="text/javascript">
-// $(document).ready(function() {
-//     // iOS web app full screen hacks.
-//     if(window.navigator.standalone == true) {
-//         // make all link remain in web app mode.
-//         $('a').click(function() {
-//             window.location = $(this).attr('href');
-//             return false;
-//         });
-//     }
-// });
-
-
-
+// disable holding something to select it and then open the right click menu
 document.addEventListener('contextmenu', event => event.preventDefault());
-// document.addEventListener('copy', event => event.preventDefault());
-// document.addEventListener('user-select', event => event.preventDefault());
-
 
 // var action = 1;
 function touchAccelerate(action='Pressed') {
@@ -180,13 +79,7 @@ function touchAccelerate(action='Pressed') {
     }   
 }
 
-
-var hero = null;
-
-// console.log(screen.height)
-// console.log(screen.pixelDepth)
-// console.log(screen.width)
-// I would like to include touch support for basic operations
+var hero = null; // I would like to include touch support for basic operations
 
 function startGame() {
     myGameArea.start();
@@ -194,9 +87,6 @@ function startGame() {
     // creates the player hero char:
     me_ThePlayer1CharacterHero = new me_ThePlayer1CharacterHero(0, 0, 4*pixelsPerMeter);
     hero = me_ThePlayer1CharacterHero;
-
-    // myGameArea.canvasHeight
-    // myGameArea.canvasWidth
 
     // create a few game objs
     block1 = new blockComponent(0.15 * myGameArea.canvasWidth, 200, 0, 30, 30, "red", 40, "fire");
@@ -210,7 +100,6 @@ function startGame() {
 
 // any game obj that I can potentially control should be in here.
 var controllableGameObjs = {};
-
 
 // This function runs on a timer. Every tick (20ms for 50FPS), the entire screen gets cleared and the objs in the canvas get updated
 function updateGameArea() {
