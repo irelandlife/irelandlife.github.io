@@ -510,7 +510,7 @@ function ballComponent(x=300, y=400, z=0, radius=100, color="blue", filled=true,
         ctx = myGameArea.context;
         ctx.fillStyle = color;
         ctx.beginPath();
-        ctx.arc(this.x - this.radius, this.y - this.radius, this.sizeOnScreen_px/2, 0, 2 * Math.PI);
+        ctx.arc(this.x - this.sizeOnScreen_px/2, this.y - this.sizeOnScreen_px/2, this.sizeOnScreen_px/2, 0, 2 * Math.PI);
         if (this.filled == true) {
             ctx.fill();
         } else {
@@ -545,7 +545,7 @@ function blockComponent(x=200, y=300, z=0, width, height, color, mass=100, eleme
         // if (this.width - this.z > 1 || this.height - this.z > 1) { // if the object isn't too far away, draw it
         ctx = myGameArea.context;
         ctx.fillStyle = color;
-        ctx.fillRect(this.x-this.width, this.y-this.height, this.sizeOnScreen_px, this.sizeOnScreen_px);
+        ctx.fillRect(this.x-this.sizeOnScreen_px, this.y-this.sizeOnScreen_px, this.sizeOnScreen_px, this.sizeOnScreen_px);
         // }
     }
 }
