@@ -21,7 +21,7 @@
     <style>
         body {
             margin: 0;
-            background-color: rgb(226, 226, 226);
+            background-color: rgb(197, 197, 197);
             /* touch-action:none; not sure why I need this initially */
         }
         canvas {
@@ -36,6 +36,7 @@
             left: 50%;
             -ms-transform: translate(-50%, -50%);
             transform: translate(-50%, -50%);
+            font-size: 40px;
             /* disable highlighting the text on the button with long button touch/press/hold */
             -webkit-user-select: none; 
             -moz-user-select: none;
@@ -55,22 +56,18 @@
 <body>
 <!-- I'm first going to try and make as much of this game in canvas since I will be able to have almost all the control that I want, and it
 will be as cross platform as it can get at that point. And the future will bring more ease of adding new controls/signals/outside interactions -->
-
 <!-- <canvas id="canvasLocation" ontouchstart="touchAccelerate('Pressed');" ontouchend="touchAccelerate('Released');"></canvas>-->
 <canvas id="canvas" ontouchstart="touchAccelerate('Pressed');" ontouchend="touchAccelerate('Released');"></canvas>
-
 <!-- make the button dissapear after pressing start -->
-<button id="startButton" touchstart="this.onclick.call();" onclick="startGame(); document.body.setAttribute('onkeydown', 'keyWasPressed(event)'); document.body.setAttribute('onkeyup', 'keyWasReleased(event)'); this.style.display='none'"> Start Game </button>
-
+<button id="startButton" touchstart="this.onclick.call();" onclick="startGame(); document.body.setAttribute('onkeydown', 'keyWasPressed(event)'); document.body.setAttribute('onkeyup', 'keyWasReleased(event)'); this.style.display='none'">Start Game</button>
 <!-- <p>Hello</p> -->
 <!-- <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script> -->
 
 <script>
-
 // disable holding something to select it and then open the right click menu
 document.addEventListener('contextmenu', event => event.preventDefault());
 
-// var action = 1;
+// Touch the screen or let go (on a touch screen device) to accelerate the objs or release them (for now).
 function touchAccelerate(action='Pressed') {
     if (action == "Pressed") {
         me_ThePlayer1CharacterHero.tryingToForceLiftObjUp = true;
@@ -79,7 +76,17 @@ function touchAccelerate(action='Pressed') {
     }   
 }
 
-var hero = null; // I would like to include touch support for basic operations
+// Problem #1: if the balls go up too high, they get reset at ground level after a while. This is probably correctable with a higher frame rate
+// Issue #2: if I rotate the orientation of the screen to landscape mode, I need the bottom of the screen the be the ground level for now.
+// Issue #3: the app icon images need to be redone, and the main app icon needs to be resized to a square.
+// Issue #5: I would like to be able to send the balls forward and backward with a force, and same with left and right
+
+// Feature: Since the balls will most likely roll off the screen, having an easy way to reset the balls would be nice. Either a button or shaking the iphone or wall to right
+// Future: I need to be able to control a specific object, a group of objects, or a large sum of objects separately
+// Future: As I move near objects, I need to be able to control them quickly
+// Issue #6: Moving the ball forward and backward isn't working, and might have an issue
+
+var hero = null;
 
 function startGame() {
     myGameArea.start();
@@ -123,13 +130,6 @@ function updateGameArea() {
     forces(ball1);
     forces(block1);
     forces(block2);
-    // Calculate gravity for every obj:
-    // If the obj moved, update the drawing for ball1:
-    // gravity(ball1);
-    // gravity(block1);
-    // gravity(block2);
-    // Update all the objs that were or will be visible (so that they can get redrawn to the screen) after every clear screen call
-
 
     // This is how I can use the mouse's location to affect where the objects should move to:
     // if (myGameArea.x && myGameArea.y) {
@@ -137,6 +137,7 @@ function updateGameArea() {
     //     ball1.y = myGameArea.y + ball1.radius;
     // }
 
+    // Update all the objs that were or will be visible (so that they can get redrawn to the screen) after every clear screen call
     ball1.update();
     block1.update();
     block2.update();
@@ -151,7 +152,7 @@ function updateGameArea() {
 var pixelsPerMeter = 4440;
 var metersPerPixel = 1/4440;
 
-function me_ThePlayer1CharacterHero(x=0, y=0, z=3.6*4440, hipRotationY=0, leftArmAimingX=0, leftArmAimingY=screen.availHeight, rightArmAimingX=screen.width, rightArmAimingY=screen.availHeight, mass=100, waterForcePower=0, fireForcePower=0, airForcePower=0, rockForcePower=0, metalForcePower=0, electricityForcePower=0, laserForcePower=0, staminaEnergy=100, punchingPower=10, flyingSpeed=0, flyingAcceleration=0, runningSpeed=10, runningAcceleration=10, jumpingHeight=1, swimmingSpeed=1) {
+function me_ThePlayer1CharacterHero(x=0, y=0, z=4*pixelsPerMeter, hipRotationY=0, leftArmAimingX=0, leftArmAimingY=screen.availHeight, rightArmAimingX=screen.width, rightArmAimingY=screen.availHeight, mass=100, waterForcePower=0, fireForcePower=0, airForcePower=0, rockForcePower=0, metalForcePower=0, electricityForcePower=0, laserForcePower=0, staminaEnergy=100, punchingPower=10, flyingSpeed=0, flyingAcceleration=0, runningSpeed=10, runningAcceleration=10, jumpingHeight=1, swimmingSpeed=1) {
     this.waterForcePower=waterForcePower;
     this.fireForcePower=fireForcePower;
     this.airForcePower=airForcePower;
@@ -294,7 +295,7 @@ function keyWasPressed(event) {
     // In order to accelerate player1 up, they need to use their force to accelerate the earth or something touching the ground downward
 
     else {
-        console.log("A key was pressed");
+        console.log("An unused key was pressed");
         console.log(pressedKey);
         console.log("The keyCode is:");
         console.log(keyCode);
@@ -410,7 +411,7 @@ function forces_y(obj) {
     // var finalVelocity_y = objInitialVelocity_y + sumOfAccelerations_y * deltaTime;
     var finalVelocity_y = objInitialVelocity_y + sumOfAccelerations_y * deltaTime;
     // The finalPosition_y tells me where's the maximum distance the obj should be (unless there is something under it or a new force on it)
-    var finalPosition_y_m = objMetersAboveGround_y + objInitialVelocity_y*deltaTime + 0.5*sumOfAccelerations_y*(deltaTime**2);
+    var predictedFinalPosition_y_m = objMetersAboveGround_y + objInitialVelocity_y*deltaTime + 0.5*sumOfAccelerations_y*(deltaTime**2);
     
     // I need to know how close the object is to me as well
     var distanceFromHeroToObj_m = heroDistanceToObj_m(obj);
@@ -419,62 +420,45 @@ function forces_y(obj) {
     // I figured out that objects shrink half their size after they move twice the distance away from the user. This line is (1/x)*t where t = 800 given my computer's number
     // of pixels per meter (4440 pixels/meter)
     // Changing the 800 value to something else should create different zoom effects
-    obj.lengthOnScreen_px = 800/(Math.max(distanceFromHeroToObj_m, 0.5));
+    // Determine what the length of the object is on the screen.
+    obj.sizeOnScreen_px = 800/(Math.max(distanceFromHeroToObj_m, 0.5)); // this should be pixels/m where the result is in pixels
+    // As the distance to the object increases, I need it's size on the screen to decrease.
 
-    // var yvirtual_m = (0.5 + distanceFromHeroToObj_m)*(0.362689338); // this tells me about how high up (virtually in meters) the object is off the ground.
-
-    // finalPosition_y_m gives me the height of the obj above the ground (above the bottom of the screen), in meters.
-    // To get the number of pixels from the top of the screen, assuming the bottom of the screen is the ground:
-    
-    // Determine where the object is located on the screen:
-    var theta1 = Math.asin(finalPosition_y_m/(0.5+distanceFromHeroToObj_m));
-    var y1_px = 0.5*Math.tan(theta1) * pixelsPerMeter;
-    var objHeightOnScreen_y_px = myGameArea.canvasHeight - y1_px;
-
-
-    // I need to convert finalPosition_y_m from meters to pixels from the top of the screen
-    // I need to know how many meters tall my screen is, what direction/orientation my screen is looking at, where my screen is located, 
-    // etc. To simplify the process for a 2d simulation, I will assume basic viewing options for now
-    // To determine the obj's final position in pixels, where the bottom of the screen is ground and the top of the screen is some distance above the objs.
-    // The obj is going to fall a little bit, if I know how high up it was it meters and in pixels, and I know how many pixels is at the bottom of the screen and 0 meters,
-    // I can figure out where it's located in pixels:
-    
-    // var ball_x // determine how far the ball is from my eyes and then update 6 meters to the correct distance the ball is from my eyes
-    // var finalObjPixelHeight_y = screenHeight+(-1*screenHeight/heroDistanceToObj(obj))*finalPosition_y_m; // assuming the ball's x position is 6m away from me
-
-    // console.log(objHeightOnScreen_y_px);
-    // console.log(myGameArea.canvasHeight);
-
+    var objHeightOnScreen_y_px = 0;
     // now I can update objHeight_y and velocity if they aren't going to hit the ground. Otherwise, I need to draw them on the ground
-    if (finalPosition_y_m <= 0) {
+    if (predictedFinalPosition_y_m <= 0) {
         var numPixelsAboveGround = 1;
-        // If the ball would go past the canvas ground if it wasn't for me:
-        // set the ball on the ground with no bounce:
-        objHeightOnScreen_y_px = myGameArea.canvasHeight-numPixelsAboveGround;
-        // finalPosition_y_m = numPixelsAboveGround/(screenHeight+(-1*screenHeight/heroDistanceToObj(obj)));
+        objHeightOnScreen_y_px = myGameArea.canvas.height - numPixelsAboveGround;
         finalVelocity_y = 0;
-        finalPosition_y_m = 0;
+        predictedFinalPosition_y_m = 0;
+    } else { // if the object is above the ground, determine where on the screen it should be located given how far away it is
+        // Determine where the object is located on the screen from the y=0 top of the screen:
+        var theta1 = Math.asin(predictedFinalPosition_y_m/(0.5+distanceFromHeroToObj_m));
+        var y1_px = 0.5*Math.tan(theta1) * pixelsPerMeter; // this tells me how many pixels off the ground the object appears to be as measured on the screen.
+        objHeightOnScreen_y_px = myGameArea.canvasHeight - y1_px; // this is where the object should be drawn on the screen from the top left 0 pixel.
+        // It's the number of pixels below the top of the screen that it should be drawn. Technically where the bottom of the object should be drawn from.
     }
+
     obj.y = objHeightOnScreen_y_px;
     obj.objVelocity_y = finalVelocity_y;
-    obj.objMetersAboveGround = finalPosition_y_m; // I need to update the obj height above ground
+    obj.objMetersAboveGround = predictedFinalPosition_y_m; // I need to update the obj height above ground
 }
 
+// This controls the movement and speed of the objects in the left/R direction
 function sumOfForces_x(obj) {
     if (me_ThePlayer1CharacterHero.tryingToForceObjLeft == true) {
-        obj.x -= 1;
+        obj.x -= 10; // units of pixels
     } else if (me_ThePlayer1CharacterHero.tryingToForceObjRight == true) {
-        obj.x += 1;
+        obj.x += 10;
     }
 }
 
+// This determines the z position of the objects (how far/close they are to me).
 function sumOfForces_z(obj) {
     if (me_ThePlayer1CharacterHero.tryingToForceObjForward == true) {
-        // obj.z -= 1;
-        obj.lengthOnScreen_px -= 1;
+        obj.z -= 10; // -z to move obj forward. The object's size on the screen is auto determined in the forces_y() function since it checks for obj distance
     } else if (me_ThePlayer1CharacterHero.tryingToForceObjBack == true) {
-        // obj.z += 1;
-        obj.lengthOnScreen_px += 1;
+        obj.z += 10;
     }
 }
 
@@ -482,14 +466,13 @@ function sumOfForces_z(obj) {
 function forces_x(obj) {
     // var objInitialVelocity_x = obj.objVelocity_x;
     // var sumOfAccelerations_x = 
-    sumOfForces_x(obj);// / obj.mass;
-
+    sumOfForces_x(obj);
 }
 
 function forces_z(obj) {
     // var objInitialVelocity_z = obj.objVelocity_z;
     // var sumOfAccelerations_z = 
-    sumOfForces_z(obj);// / obj.mass;
+    sumOfForces_z(obj);
 
 }
 
@@ -517,7 +500,7 @@ function ballComponent(x=300, y=400, z=0, radius=100, color="blue", filled=true,
     // this.objMetersAboveGround = function() {return metersPerPixel*(myGameArea.canvasHeight-this.y-2*this.radius);};
     this.objMetersAboveGround = (myGameArea.canvasHeight-this.y)*metersPerPixel;
     this.radius = radius;
-    this.lengthOnScreen_px = this.radius;
+    this.sizeOnScreen_px = this.radius*2;
     // this.objHeight = function() {return this.y + this.radius;};
     this.filled = filled;
     
@@ -527,11 +510,7 @@ function ballComponent(x=300, y=400, z=0, radius=100, color="blue", filled=true,
         ctx = myGameArea.context;
         ctx.fillStyle = color;
         ctx.beginPath();
-        // ctx.arc(this.x, this.y, this.radius, 0, 2 * Math.PI);
-        // ctx.arc(this.x, this.y, this.radius-this.lengthOnScreen_px, 0, 2 * Math.PI);
-        ctx.arc(this.x - this.radius, this.y - this.radius, this.radius, 0, 2 * Math.PI);
-        // ctx.arc(this.x-this.lengthOnScreen_px/2, this.y-this.lengthOnScreen_px/2, this.lengthOnScreen_px/2, 0, 2 * Math.PI);
-        // ctx.arc(this.x-this.lengthOnScreen_px/2, this.y-this.lengthOnScreen_px/2, this.lengthOnScreen_px/2 - this.z, 0, 2 * Math.PI);
+        ctx.arc(this.x - this.radius, this.y - this.radius, this.sizeOnScreen_px/2, 0, 2 * Math.PI);
         if (this.filled == true) {
             ctx.fill();
         } else {
@@ -559,17 +538,14 @@ function blockComponent(x=200, y=300, z=0, width, height, color, mass=100, eleme
     this.x = x;
     this.y = y;
     this.z = z;
-    this.lengthOnScreen_px = this.height;
+    this.sizeOnScreen_px = this.height;
     this.objMetersAboveGround = (myGameArea.canvasHeight-this.y) * metersPerPixel; //function() {return metersPerPixel*(myGameArea.canvasHeight-this.y);};
-    // this.objHeight = function() {return this.y + this.height;};
     this.color = color;
     this.update = function() {
         // if (this.width - this.z > 1 || this.height - this.z > 1) { // if the object isn't too far away, draw it
         ctx = myGameArea.context;
         ctx.fillStyle = color;
-        ctx.fillRect(this.x-this.width, this.y-this.height, this.width, this.height);
-        // ctx.fillRect(this.x-this.width, this.y-this.height, this.width - this.z, this.height - this.z); this.lengthOnScreen_px
-        // ctx.fillRect(this.x-this.lengthOnScreen_px, this.y-this.lengthOnScreen_px, this.lengthOnScreen_px - this.z, this.lengthOnScreen_px - this.z);
+        ctx.fillRect(this.x-this.width, this.y-this.height, this.sizeOnScreen_px, this.sizeOnScreen_px);
         // }
     }
 }
