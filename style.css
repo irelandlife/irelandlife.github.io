@@ -1,61 +1,70 @@
 body {
-/* no-repeat */
- background-image: url("nature.jpg");
- background-repeat: repeat-y;
-/*  background-repeat: no-repeat; */
- background-attachment: fixed;	/*not scroll.let the background image follow my scroll*/
- background-size: none;
-/*  margin-left: 0%;  Gives me some space from the left side of the page */
- color: white;	/*text color*/
- font-size: 40px;
+    /* no-repeat */
+     background-image: url("nature.jpg");
+     background-repeat: repeat-y;
+    /*  background-repeat: no-repeat; */
+     background-attachment: fixed;	/*not scroll.let the background image follow my scroll*/
+     background-size: none;
+     /* margin-left: 10%;  */
+     /* display: block;
+     margin: center;
+     padding: center; */
+      /* Gives me some space from the left side of the page */
+     color: white;	/*text color*/
+     /* font-size: 40px; */
+    }
+
+#centerTheTopDropdownList {
+    /* essential for keeping the main ul centered on the page */
+    display: flex;
+    justify-content: center;
 }
-
-
 
 ul {
- margin: 0px;
- padding: 0px;
-/*  list-style: none; */
- font-family: arial;
- width: (100vw)/4-10px;
- height: 10%;
- font-size: 40px;
- text-align: center;
- 
+    /* Essential: dont indent when an unordered list is added or created under a new ul */
+    padding-left: 0;
+    min-height: 5vh;
+    font-size: 30px;
 }
 
+
 ul li {
-/*  float: left; */
-/*  width: 350px;
- height: 100px; */
- background-color: black;	/*The default color of the menu list*/
- opacity: .8;
- line-height: 40px;
- text-align: center;
-/*  font-size: 40px; */
+    /* this is so no bullet points are drawn */
+    list-style: none;
+    float: left;  /* this is essential for keeping all ul to li's left to right of one another */
+    background-color: black;
+    opacity: .8;
+    /* line-height: 40px; */
+    text-align: center;
+    width: 20vw;
+    font-size: 30px;
+    /* min-height: 5vh; */
 }
 
 a {
- color: white;
+    color: white;
 }
 
 ul li a {
- text-decoration: none;
- color: white;
- display: block;
-/*  width: 350px;
- height: 100px;
- font-size: 40px; */
- }
+    text-decoration: none;
+    color: white;
+    /* this is essential for making sure a hover covers most of the li as a block, not just the text */
+    display: block;
+    }
 
-ul li a:hover {
- background-color: blue;	/*when the menu item is hovered over*/
+
+ul li a:hover { 
+    background-color: blue;	/*when the menu item is hovered over*/
 }
 
+/* this is where the hidden drop down items live */
 ul li ul li {
- display: none;
+/* display is none since theyre hiding */
+    display: none;
 }
 
+/* this is where the hidden drop down items live when hovered */
 ul li:hover ul li {
- display: block;
+/* display is block to show them */
+    display: block;
 }
