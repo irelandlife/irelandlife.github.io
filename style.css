@@ -5,7 +5,7 @@ body {
 /*  background-repeat: no-repeat; */
  background-attachment: fixed;	/*not scroll.let the background image follow my scroll*/
  background-size: none;
- margin-left: 0%;  /*Gives me some space from the left side of the page*/
+/*  margin-left: 0%;  Gives me some space from the left side of the page */
  color: white;	/*text color*/
  font-size: 40px;
 }
@@ -17,7 +17,7 @@ ul {
  padding: 0px;
  list-style: none;
  font-family: arial;
- width: 100vw/4;
+ width: (100vw)/4-10px;
  height: 10%;
  font-size: 40px;
  text-align: center;
