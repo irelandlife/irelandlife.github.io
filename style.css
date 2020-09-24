@@ -15,7 +15,7 @@ body {
 ul {
  margin: 0px;
  padding: 0px;
- list-style: none;
+/*  list-style: none; */
  font-family: arial;
  width: (100vw)/4-10px;
  height: 10%;
