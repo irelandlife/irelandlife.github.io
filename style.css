@@ -1,8 +1,8 @@
 body {
 /* no-repeat */
  background-image: url("nature.jpg");
- /*background-repeat: repeat-y;*/
- background-repeat: no-repeat;
+ background-repeat: repeat-y;
+/*  background-repeat: no-repeat; */
  background-attachment: fixed;	/*not scroll.let the background image follow my scroll*/
  background-size: none;
  margin-left: 10%;  /*Gives me some space from the left side of the page*/
@@ -28,6 +28,10 @@ ul li {
  line-height: 40px;
  text-align: center;
  font-size: 20px;
+}
+
+a {
+ color: white;
 }
 
 ul li a {
