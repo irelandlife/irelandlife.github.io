@@ -5,7 +5,7 @@ body {
 /*  background-repeat: no-repeat; */
  background-attachment: fixed;	/*not scroll.let the background image follow my scroll*/
  background-size: none;
- margin-left: 10%;  /*Gives me some space from the left side of the page*/
+ margin-left: 0%;  /*Gives me some space from the left side of the page*/
  color: white;	/*text color*/
  font-size: 40px;
 }
@@ -17,19 +17,22 @@ ul {
  padding: 0px;
  list-style: none;
  font-family: arial;
- width: 400px;
- height: 200px;
+ width: 100vw/4;
+ height: 10%;
+ font-size: 40px;
+ text-align: center;
+ 
 }
 
 ul li {
- float: left;
- width: 350px;
- height: 100px;
+/*  float: left; */
+/*  width: 350px;
+ height: 100px; */
  background-color: black;	/*The default color of the menu list*/
  opacity: .8;
  line-height: 40px;
  text-align: center;
- font-size: 40px;
+/*  font-size: 40px; */
 }
 
 a {
@@ -40,9 +43,9 @@ ul li a {
  text-decoration: none;
  color: white;
  display: block;
- width: 350px;
+/*  width: 350px;
  height: 100px;
- font-size: 40px;
+ font-size: 40px; */
  }
 
 ul li a:hover {
