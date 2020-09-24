@@ -21,8 +21,8 @@ ul {
 
 ul li {
  float: left;
- width: 250px;
- height: 50px;
+ width: 350px;
+ height: 100px;
  background-color: black;	/*The default color of the menu list*/
  opacity: .8;
  line-height: 40px;
