@@ -17,6 +17,8 @@ ul {
  padding: 0px;
  list-style: none;
  font-family: arial;
+ width: 400px;
+ height: 200px;
 }
 
 ul li {
