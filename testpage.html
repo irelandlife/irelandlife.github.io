@@ -1,133 +1,211 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+.axes {
+padding: 1em;
+}
+.buttons {
+margin-left: 1em;
+}
+/*meter*/.axis {
+min-width: 200px;
+margin: 1em;
+}
+.button {
+display: inline-block;
+width: 1em;
+text-align: center;
+padding: 1em;
+border-radius: 20px;
+border: 1px solid black;
+background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAIAAACQd1PeAAAAAXNSR0IArs4c6QAAAAxJREFUCNdjYPjPAAACAgEAqiqeJwAAAABJRU5ErkJggg==);
+background-size: 0% 0%;
+background-position: 50% 50%;
+background-repeat: no-repeat;
+}
+.pressed {
+border: 1px solid red;
+}
+.touched::after {
+content: "touch";
+display: block;
+position: absolute;
+margin-top: -0.2em;
+margin-left: -0.5em;
+font-size: 0.8em;
+opacity: 0.7;
+}
+</style>
+</head>
+<body>
 
-
-
+<h1 id="start">Press a button on your controller to start</h2>
 
 <script>
 var haveEvents = 'ongamepadconnected' in window;
 var controllers = {};
 
-function connecthandler(e) {
-  addgamepad(e.gamepad);
+// if multiple gamepads are connected to a computer, this gets called
+function connecthandler(e) { // e comes from window event triggering argument
+    addgamepad(e.gamepad); // e.gamepad is of high importance
 }
 
+// call this to add a newly connected gamepad's own button divs and spans and progresses for each button or axes that's detected
 function addgamepad(gamepad) {
-  controllers[gamepad.index] = gamepad;
-
-  var d = document.createElement("div");
-  d.setAttribute("id", "controller" + gamepad.index);
-
-  var t = document.createElement("h1");
-  t.appendChild(document.createTextNode("gamepad: " + gamepad.id));
-  d.appendChild(t);
-
-  var b = document.createElement("div");
-  b.className = "buttons";
-  for (var i = 0; i < gamepad.buttons.length; i++) {
-    var e = document.createElement("span");
-    e.className = "button";
-    //e.id = "b" + i;
-    e.innerHTML = i;
-    b.appendChild(e);
-  }
-
-  d.appendChild(b);
-
-  var a = document.createElement("div");
-  a.className = "axes";
-
-  for (var i = 0; i < gamepad.axes.length; i++) {
-    var p = document.createElement("progress");
-    p.className = "axis";
-    //p.id = "a" + i;
-    p.setAttribute("max", "2");
-    p.setAttribute("value", "1");
-    p.innerHTML = i;
-    a.appendChild(p);
-  }
-
-  d.appendChild(a);
-
-  // See https://github.com/luser/gamepadtest/blob/master/index.html
-  var start = document.getElementById("start");
-  if (start) {
-    start.style.display = "none";
-  }
-
-  document.body.appendChild(d);
-  requestAnimationFrame(updateStatus);
+    controllers[gamepad.index] = gamepad; // save gamepad to the controllers dictionary(python)
+    
+    var d = document.createElement("div"); // create a new section
+    d.setAttribute("id", "controller" + gamepad.index); // update the div's id="controller#"
+    
+    var t = document.createElement("h1"); // create text h1
+    // gamepad: Wireless Controller (STANDARD GAMEPAD Vendor: 054c Product: 09cc)
+    t.appendChild(document.createTextNode("gamepad: " + gamepad.id)); // append: gamepad: # to a textnode of h1 size
+    d.appendChild(t); // append the textnode to the div
+    
+    var b = document.createElement("div"); // create a new div
+    b.className = "buttons"; // set the <div class="buttons">
+    // create a new span element for each button on the gamepad where the innerhtml is 0 to length-1
+    // update the class name to button
+    // append the new <span class="button">{i}</span> to the <div class="buttons"> above
+    for (var i = 0; i < gamepad.buttons.length; i++) {
+        var e = document.createElement("span");
+        e.className = "button";
+        //e.id = "b" + i;
+        e.innerHTML = i;
+        b.appendChild(e);
+    }
+    
+    d.appendChild(b); // append the <div class="buttons"> with all its buttons spans for each controller button to the <div id="controller#">
+    
+    // create a new <div class="axes">
+    var a = document.createElement("div");
+    a.className = "axes";
+    
+    // for the axes thumbstick axes that were detected from the controller, create a <progress class="axis" max=2 value=1>{i}</progress>
+    // and append the html tag to the axes div
+    for (var i = 0; i < gamepad.axes.length; i++) {
+        var p = document.createElement("progress");
+        p.className = "axis";
+        //p.id = "a" + i;
+        p.setAttribute("max", "2");
+        p.setAttribute("value", "1");
+        p.innerHTML = i;
+        a.appendChild(p);
+    }
+    
+    d.appendChild(a); // append the axes div tag with all its progress elements for each detected axis in the controller to main <div id="controller#">
+    
+    var start = document.getElementById("start"); // get the text at the top with the start tag
+    // if the start is true, turn off display for the start message
+    if (start) {
+        start.style.display = "none";
+    }
+    // append the main <div id="controller#"> tag and all the sub tags to the doc body
+    document.body.appendChild(d);
+    requestAnimationFrame(updateStatus); // have requestAnimationFrame call updateStatus
+    // setInterval(updateStatus, 50); // check the update status every 50 ms
 }
 
+// this is the function that is being listed for by the window and that gets called after a gamepad
+// was disconnected -- start removing a gamepad from the html body
 function disconnecthandler(e) {
-  removegamepad(e.gamepad);
+    removegamepad(e.gamepad);
 }
 
+// we can select the controller/element by it's id that was set earlier
+// and remove it which removes all the tags for its buttons and axes.
 function removegamepad(gamepad) {
-  var d = document.getElementById("controller" + gamepad.index);
-  document.body.removeChild(d);
-  delete controllers[gamepad.index];
+    var d = document.getElementById("controller" + gamepad.index);
+    document.body.removeChild(d);
+    delete controllers[gamepad.index]; // this removes the controller's existance from the dictionary
 }
 
+// This gets called repeatedly to 
 function updateStatus() {
-  if (!haveEvents) {
-    scangamepads();
-  }
-
-  var i = 0;
-  var j;
-
-  for (j in controllers) {
-    var controller = controllers[j];
-    var d = document.getElementById("controller" + j);
-    var buttons = d.getElementsByClassName("button");
-
-    for (i = 0; i < controller.buttons.length; i++) {
-      var b = buttons[i];
-      var val = controller.buttons[i];
-      var pressed = val == 1.0;
-      if (typeof(val) == "object") {
-        pressed = val.pressed;
-        val = val.value;
-      }
-
-      var pct = Math.round(val * 100) + "%";
-      b.style.backgroundSize = pct + " " + pct;
-
-      if (pressed) {
-        b.className = "button pressed";
-      } else {
-        b.className = "button";
-      }
+    // if not 'ongamepadconnected' in window, if no gamepad is connected, scan for gamepads
+    if (!haveEvents) {
+        scangamepads();
     }
+    // if a gamepad is connected:
+    var i = 0;
+    var j;
 
-    var axes = d.getElementsByClassName("axis");
-    for (i = 0; i < controller.axes.length; i++) {
-      var a = axes[i];
-      a.innerHTML = i + ": " + controller.axes[i].toFixed(4);
-      a.setAttribute("value", controller.axes[i] + 1);
+    // for every j controller navigator.getGamepads()[i] in controllers dictionary
+    for (j in controllers) {
+        var controller = controllers[j];
+        var d = document.getElementById("controller" + j); // get the right controller element from the dict
+        var buttons = d.getElementsByClassName("button"); // get a list of all the button elements for the controller
+    
+        // check the following for the number of buttons the controller has
+        for (i = 0; i < controller.buttons.length; i++) {
+            var b = buttons[i]; // get the i'th element with button className
+            var val = controller.buttons[i]; // get the value of the button
+            var pressed = val == 1.0;
+            if (typeof(val) == "object") {
+                pressed = val.pressed;
+                val = val.value;
+            }
+            // from val.value, we can get the value of the button
+            var pct = Math.round(val * 120) + "%";
+            // update the webpage to show the button's style.backgroundSize (since the green buttons are images) to 120%
+            b.style.backgroundSize = pct;// + " " + pct;
+            // if a button was pressed, update the className to include pressed as well
+            if (pressed) {
+                b.className = "button pressed";
+            } else {
+                b.className = "button";
+            }
+        }
+    
+        // get an array of the axis elements from this controller 
+        var axes = d.getElementsByClassName("axis");
+        // run through every axis in the controller
+        for (i = 0; i < controller.axes.length; i++) {
+            // get the i'th axis
+            var a = axes[i];
+            // set the innerhtml to axis#: controller.a.toFixed(4);
+            a.innerHTML = i + ": " + controller.axes[i].toFixed(4);
+            // update the progress value for this axis to 1 plus the controller axis value
+            a.setAttribute("value", controller.axes[i] + 1);
+        }
     }
-  }
-
-  requestAnimationFrame(updateStatus);
+    // either call the updateStatus func again, or set a timer in the func above
+    requestAnimationFrame(updateStatus);
 }
 
+// check the navigator for gamepads
 function scangamepads() {
-  var gamepads = navigator.getGamepads ? navigator.getGamepads() : (navigator.webkitGetGamepads ? navigator.webkitGetGamepads() : []);
-  for (var i = 0; i < gamepads.length; i++) {
-    if (gamepads[i]) {
-      if (gamepads[i].index in controllers) {
-        controllers[gamepads[i].index] = gamepads[i];
-      } else {
-        addgamepad(gamepads[i]);
-      }
+    var gamepads = navigator.getGamepads ? navigator.getGamepads() : (navigator.webkitGetGamepads ? navigator.webkitGetGamepads() : []);
+    // for each gamepad that was found
+    for (var i = 0; i < gamepads.length; i++) {
+        // check to see if the i'th gamepads has something
+        if (gamepads[i]) {
+            // if the i'th gamepads index is in the controllers dict
+            if (gamepads[i].index in controllers) {
+                // update the controllers dictionary to the navigator gamepad's state (which updates which buttons/axes are being pressed)
+                controllers[gamepads[i].index] = gamepads[i];
+            } else {
+                // otherwise, this is a new gamepad, so add it
+                addgamepad(gamepads[i]);
+            }
+        }
     }
-  }
 }
 
+// the window is listening for gamepads connecting to the website/pc. If found, trigger connecthandler() function with window as first argument
 window.addEventListener("gamepadconnected", connecthandler);
-window.addEventListener("gamepaddisconnected", disconnecthandler);
+window.addEventListener("gamepaddisconnected", disconnecthandler); // also listen for when the gamepad is disconnected
 
+// Every 0.5sec, call scangamepads()
+// if not 'ongamepadconnected' in window, scan for gamepads again in 500ms
 if (!haveEvents) {
- setInterval(scangamepads, 500);
+    setInterval(scangamepads, 500);
 }
 
 </script>
+
+</body>
+</html>
+
+
