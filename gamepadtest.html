@@ -6,15 +6,15 @@
     <meta name="description" content="Plug in a ps4 controller and make sure the button mapping is correct.">
     <meta name="author" content="Robert Ireland">
     <meta name="viewport" content="width=device-width" />
-    <!-- user-scalable=no  was part of the issue code-->
-<!-- <meta name="viewport" content = "width = device-width, height=device-height, initial-scale = 1.0, minimum-scale = 1, maximum-scale = 1, user-scalable=no" /> -->
-<!-- user-scalable=no was needed for to disabling zooming on the ios -->
+    <!-- <meta name="viewport" content="width=device-width, user-scalable=no"/>  -->
+    <!-- <meta name="viewport" content = "width = device-width, height=device-height, initial-scale = 1.0, minimum-scale = 1, maximum-scale = 1, user-scalable=no" /> --> <!-- user-scalable=no was needed for to disabling zooming on the ios -->
    
 <!-- //App name -->
-<!-- <meta name="apple-mobile-web-app-title" content="PS4 Controller Check" /> -->
+<!-- <meta name="apple-mobile-web-app-title" content="PS4 Controller Check" />
 <meta name="apple-mobile-web-app-capable" content="yes" />
-<!-- <meta name="apple-mobile-web-app-status-bar-style" content="default" /> -->
-  <!-- black and default were the other options -->
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />      -->
+<!-- black and default were the other options -->
+
 
 <style>
 .axes {
@@ -57,6 +57,7 @@ opacity: 0.7;
 
 <div id="buttonPressedStatement"></div>
 <div id="axisDiv"></div>
+<div id="axisDiv2"></div>
 
 <h1 id="start">Press a button on your controller to start</h2>
 
@@ -64,44 +65,58 @@ opacity: 0.7;
 var haveEvents = 'ongamepadconnected' in window;
 var controllers = {};
 
-PS4WebAxisMap = {
-    0: "leftStickLeftRight",
-    1: "leftStickUpDown",
-    2: "rightStickLeftRight",
-    3: "rightStickUpDown"
-}
-
-var PS4WebAxisValues = {
-    0: 1,
-    1: 1,
-    2: 1,
-    3: 1
-}
-
-var PS4WebButtonMap = {
-    0: "x",
-    1: "circle",
-    2: "square",
-    3: "triangle",
-    4: "l1",
-    5: "r1",
-    6: "l2",
-    7: "r2",
-    8: "share",
-    9: "options",
-    10: "l3",
-    11: "r3",
-    12: "up",
-    13: "down",
-    14: "left",
-    15: "right",
-    16: "ps",
-    17: "pad"
+// PS4WebAxisMap_iPhone
+PS4WebAxisMap_Windows = {
+    0: "LStickLR",
+    1: "LStickUD",
+    2: "RStickLR",
+    3: "RStickUD"
 };
+
+PS4WebAxisMap_iPhone = {
+    0: "LStickLR",
+    1: "LStickUD",
+    2: "RStickLR",
+    3: "RStickUD",
+    4: "dPadLR",
+    5: "dPadUD"
+};
+
+PS4WebAxisValues = {
+    0: 0,
+    1: 0,
+    2: 0,
+    3: 0,
+    4: 0,
+    5: 0
+};
+
+// iPhone buttons only read up to [0:7] while windows reads all [0:17]
+PS4WebButtonMap = {
+    0: "X",
+    1: "Circle",
+    2: "Square",
+    3: "Triangle",
+    4: "L1",
+    5: "R1",
+    6: "L2",
+    7: "R2",
+    8: "SHARE",
+    9: "OPTIONS",
+    10: "L3",
+    11: "R3",
+    12: "Up",
+    13: "Down",
+    14: "Left",
+    15: "Right",
+    16: "PS",
+    17: "DragPad"
+};
+
 
 // these correspond to the ps4 web button map and are true if the button
 // is being pressed, and false when not.
-var PS4WebButtonsPressed = {
+PS4WebButtonsPressed = {
     0: false,
     1: false,
     2: false,
@@ -120,7 +135,7 @@ var PS4WebButtonsPressed = {
     15: false,
     16: false,
     17: false
-}
+};
 
 // if multiple gamepads are connected to a computer, this gets called
 function connecthandler(e) { // e comes from window event triggering argument
@@ -177,14 +192,15 @@ function addgamepad(gamepad) {
     d.appendChild(a); // append the axes div tag with all its progress elements for each detected axis in the controller to main <div id="controller#">
     
     var start = document.getElementById("start"); // get the text at the top with the start tag
-    // if the start is true, turn off display for the start message
+    // if the start is true, turn off display for the start message and devicetype
     if (start) {
         start.style.display = "none";
+        document.getElementById("axisDiv2").style.display = "none";
     }
     // append the main <div id="controller#"> tag and all the sub tags to the doc body
     document.body.appendChild(d);
-    // requestAnimationFrame(updateStatus); // have requestAnimationFrame call updateStatus
-    setInterval(updateStatus, 50); // check the update status every 50 ms
+    // requestAnimationFrame(updateStatus); // this updates about every 20ms...too fast
+    setInterval(updateStatus, 50); // check the update status every 50 ms. Perfect!
 }
 
 // this is the function that is being listed for by the window and that gets called after a gamepad
@@ -233,113 +249,48 @@ function updateStatus() {
             if (btnPressed) {
                 b.className = "button pressed";
             } else {
-                b.className = "button";
-                // a certain button was not pressed at this time
+                b.className = "button"; // a certain button was not pressed at this time
             }
-
             // I will keep an array of the buttons that 
-            // // I need to know which button was pressed and
-            if (btnPressed) {
-                if (PS4WebButtonsPressed[i] == false) {
-                    btnPS = document.getElementById("buttonPressedStatement");
-                    btnPS.innerHTML = PS4WebButtonMap[i] + " was pressed";
-                    PS4WebButtonsPressed[i] = true;
-                }
-                // do nothing if there was no change
-            } else { // if this button wasn't being pressed:
-                // if the button just got released:
-                if (PS4WebButtonsPressed[i] == true) {
-                    btnPS = document.getElementById("buttonPressedStatement");
-                    btnPS.innerHTML = PS4WebButtonMap[i] + " was released";
-                    PS4WebButtonsPressed[i] = false;
-                }
-                // do nothing if there was no change
+            btnPressedOrReleased = "pressed";
+            // I need to know which button was pressed
+            if (btnPressed == true && PS4WebButtonsPressed[i] == false) { // if a released button was pressed
+                PS4WebButtonsPressed[i] = true; // do nothing if there was no change
+                document.getElementById("buttonPressedStatement").innerHTML = 
+                PS4WebButtonMap[i] + " was " + btnPressedOrReleased;
+            } else if (btnPressed == false && PS4WebButtonsPressed[i] == true) { // if a pressed button was released
+                btnPressedOrReleased = "released";
+                PS4WebButtonsPressed[i] = false;
+                document.getElementById("buttonPressedStatement").innerHTML = 
+                PS4WebButtonMap[i] + " was " + btnPressedOrReleased;
             }
-            
-            // Since I don't like the idea of performing something (other than
-            // maybe a check to see if something changed)
-            // while a button is being pressed, I am going to make a 
-            // structure that saves the current state of the buttons
-            // and only updates when a change occurs, such as ''"x" was released'
-
-            // Event: change
-            // The event occurs when the content of a form element, the selection, or the checked state have changed (for <input>, <select>, and <textarea>)
-
-
-            //     // this gets called while the button is being pressed
-            //     // console.log(b.innerHTML);
-
-            //     var buttonNum = i;
-
-            //     var x = 0;
-            //     var circle = 1;
-            //     var square = 2;
-            //     var triangle = 3;
-            //     if (buttonNum == x) {
-            //         console.log("x was pressed");
-            //     } else if (buttonNum == circle) {
-            //         console.log("circle was pressed");
-            //     } else if (buttonNum == square) {
-            //         console.log("square was pressed");
-            //     } else if (buttonNum == triangle) {
-            //         console.log("triangle was pressed");
-            //     }
-            // }
         }
-    
-        // get an array of the axis elements from this controller 
-        var axes = d.getElementsByClassName("axis");
-
+        
         // run through every axis in the controller
         for (i = 0; i < controller.axes.length; i++) {
-            // get the i'th axis
-            var a = axes[i];
-            // set the innerhtml to axis#: controller.a.toFixed(4);
-            // a.innerHTML = i + ": " + controller.axes[i].toFixed(4);
-            // update the progress value for this axis to 1 plus the controller axis value
-            a.setAttribute("value", controller.axes[i] + 1); // the controller.axes[i] can be +/-1
-            // for each axis (like joystick), I can see what the value is:
-            
-            // If I want to use my joysticks in a game, I need to know 
-            // what their values are...which will be updating constantly.
-            // I will most likely need to wait a certain amount of time before
-            // sampling button inputs. I can set a timer for updating button states
-
-            e = document.getElementById("axisDiv");
-            PS4WebAxisValues[i] = controller.axes[i] + 1; // from 0 to 2
-
-            if (i == 0) { // left stick LR from 0 to 2
-                // axisDiv
-                e.innerHTML = "leftStickLR (" + i + "): " + PS4WebAxisValues[i] +"<br>";
-            } else {
-                if (i == 1) { // left stick UP down from 0 to 2
-                    strAxis = "leftStickUD (";
-                } else if (i == 2) { /// right stick left right 0 to 2
-                    strAxis = "rightStickLR ("
-                } else if (i == 3) { // right stick up down 0 to 2
-                    strAxis = "rightStickUD ("
+            // this only updates with a new axis value when a significant change occurs (>0.04)
+            if (Math.abs(PS4WebAxisValues[i] - controller.axes[i]) > 0.04) {
+                PS4WebAxisValues[i] = (controller.axes[i]).toFixed(2); // from -1 to 1
+                // update the progress value for this axis to 1 plus the controller axis value
+                d.getElementsByClassName("axis")[i].setAttribute("value", controller.axes[i] + 1); // the controller.axes[i] can be +/-1
+                // if the axis is less than or at 0.10, consider it 0.
+                if (Math.abs(PS4WebAxisValues[i]) <= 0.10) {
+                    PS4WebAxisValues[i] = 0;
                 }
-                e.innerHTML += strAxis + i + "): " + PS4WebAxisValues[i] +"<br>";
             }
 
-            // var PS4WebAxisValues = {
-            //     0: 1,
-            //     1: 1,
-            //     2: 1,
-            //     3: 1
-            // }
-
-
-            // if (iiii == 0) {
-            //     console.log(controller); // console.log(controller.axes[i] + 1)
-            //     iiii = 1;
-            // }
+            if (i == 0) { // left stick LR from -1 to 1
+                document.getElementById("axisDiv").innerHTML = 
+                PS4WebAxisMap[i] + " (" + i + "): " + PS4WebAxisValues[i] +"<br>";
+            } else {
+                document.getElementById("axisDiv").innerHTML += 
+                PS4WebAxisMap[i] + " (" + i + "): " + PS4WebAxisValues[i] +"<br>";
+            }
         }
     }
     // either call the updateStatus func again, or set a timer in the func above
-    // requestAnimationFrame(updateStatus);
+    // requestAnimationFrame(updateStatus); // this updates around 20ms
 }
-// var iiii = 0;
 
 
 // check the navigator for gamepads
@@ -377,9 +328,28 @@ window.addEventListener("gamepaddisconnected", disconnecthandler); // also liste
 //     setInterval(scangamepads, 500);
 // }
 
+
+// deviceType can currently be either "iPhone", "Windows", "Linux"
+// The following checks if I'm using an iphone or pc,
+// which I need since the button mapping is extra wack between them rn
+ua = window.navigator.userAgent;
+if (ua.indexOf('iPhone') !== -1 && ua.indexOf('Safari') !== -1) {
+    deviceType = "iPhone";
+    PS4WebAxisMap = PS4WebAxisMap_iPhone;
+} else if (ua.indexOf('Chrome') !== -1 && ua.indexOf('Windows') !== -1) {
+    deviceType = "Windows";
+    PS4WebAxisMap = PS4WebAxisMap_Windows;
+} else if (ua.indexOf('Chrome') !== -1 && ua.indexOf('Linux') !== -1) {
+    deviceType = "Linux";
+    PS4WebAxisMap = PS4WebAxisMap_Windows;
+} else {
+    deviceType = "Unknown";
+}
+document.getElementById("axisDiv2").innerHTML = 
+"Using " + deviceType + " gamepad controller settings.";
+
+
 </script>
 
 </body>
 </html>
-
-
