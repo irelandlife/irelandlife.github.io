@@ -6,15 +6,15 @@
     <meta name="description" content="Plug in a ps4 controller and make sure the button mapping is correct.">
     <meta name="author" content="Robert Ireland">
     <meta name="viewport" content="width=device-width" />
-    <!-- user-scalable=no  was part of the issue code-->
-<!-- <meta name="viewport" content = "width = device-width, height=device-height, initial-scale = 1.0, minimum-scale = 1, maximum-scale = 1, user-scalable=no" /> -->
-<!-- user-scalable=no was needed for to disabling zooming on the ios -->
+    <!-- <meta name="viewport" content="width=device-width, user-scalable=no"/>  -->
+    <!-- <meta name="viewport" content = "width = device-width, height=device-height, initial-scale = 1.0, minimum-scale = 1, maximum-scale = 1, user-scalable=no" /> --> <!-- user-scalable=no was needed for to disabling zooming on the ios -->
    
 <!-- //App name -->
 <!-- <meta name="apple-mobile-web-app-title" content="PS4 Controller Check" />
 <meta name="apple-mobile-web-app-capable" content="yes" />
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
- -->  <!-- black and default were the other options -->
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />      -->
+<!-- black and default were the other options -->
+
 
 <style>
 .axes {
@@ -57,6 +57,7 @@ opacity: 0.7;
 
 <div id="buttonPressedStatement"></div>
 <div id="axisDiv"></div>
+<div id="axisDiv2"></div>
 
 <h1 id="start">Press a button on your controller to start</h2>
 
@@ -376,6 +377,19 @@ window.addEventListener("gamepaddisconnected", disconnecthandler); // also liste
 // if (!haveEvents) {
 //     setInterval(scangamepads, 500);
 // }
+
+ua = window.navigator.userAgent;
+
+if(ua.indexOf('iPhone') !== -1 && ua.indexOf('Safari') !== -1) {
+    ee = document.getElementById("axisDiv2");
+    ee.innerHTML = "this is an iphone";
+}
+
+// if(ua.indexOf('chrome') !== -1 || ua.indexOf('Chrome') !== -1) {
+//     ee = document.getElementById("axisDiv2");
+//     ee.innerHTML = "this is an pc"; // not thinking this is true
+// }
+
 
 </script>
 
