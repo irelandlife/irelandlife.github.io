@@ -1,6 +1,18 @@
-<!DOCTYPE html>
-<html>
+<!doctype html>
+<html lang="en">
 <head>
+    <meta charset="utf-8">
+    <title>PS4 Controller Check</title>
+    <meta name="description" content="Plug in a ps4 controller and make sure the button mapping is correct.">
+    <meta name="author" content="Robert Ireland">
+    <meta name="viewport" content="width=device-width, user-scalable=no"/> <!-- <meta name="viewport" content = "width = device-width, height=device-height, initial-scale = 1.0, minimum-scale = 1, maximum-scale = 1, user-scalable=no" /> --> <!-- user-scalable=no was needed for to disabling zooming on the ios -->
+   
+<!-- //App name -->
+<meta name="apple-mobile-web-app-title" content="PS4 Controller Check" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />     <!-- black and default were the other options -->
+
+
 <style>
 .axes {
 padding: 1em;
@@ -40,21 +52,86 @@ opacity: 0.7;
 </head>
 <body>
 
+<div id="buttonPressedStatement"></div>
+<div id="axisDiv"></div>
+
 <h1 id="start">Press a button on your controller to start</h2>
 
 <script>
 var haveEvents = 'ongamepadconnected' in window;
 var controllers = {};
 
+PS4WebAxisMap = {
+    0: "leftStickLeftRight",
+    1: "leftStickUpDown",
+    2: "rightStickLeftRight",
+    3: "rightStickUpDown"
+}
+
+var PS4WebAxisValues = {
+    0: 1,
+    1: 1,
+    2: 1,
+    3: 1
+}
+
+var PS4WebButtonMap = {
+    0: "x",
+    1: "circle",
+    2: "square",
+    3: "triangle",
+    4: "l1",
+    5: "r1",
+    6: "l2",
+    7: "r2",
+    8: "share",
+    9: "options",
+    10: "l3",
+    11: "r3",
+    12: "up",
+    13: "down",
+    14: "left",
+    15: "right",
+    16: "ps",
+    17: "pad"
+};
+
+// these correspond to the ps4 web button map and are true if the button
+// is being pressed, and false when not.
+var PS4WebButtonsPressed = {
+    0: false,
+    1: false,
+    2: false,
+    3: false,
+    4: false,
+    5: false,
+    6: false,
+    7: false,
+    8: false,
+    9: false,
+    10: false,
+    11: false,
+    12: false,
+    13: false,
+    14: false,
+    15: false,
+    16: false,
+    17: false
+}
+
 // if multiple gamepads are connected to a computer, this gets called
 function connecthandler(e) { // e comes from window event triggering argument
+    // event listener for when a certain button is pressed
+    // console.log(e.gamepad.buttons[0].pressed);
+    // console.log(e.gamepad.buttons[0].value);
     addgamepad(e.gamepad); // e.gamepad is of high importance
 }
 
 // call this to add a newly connected gamepad's own button divs and spans and progresses for each button or axes that's detected
+// this is only called once each time a new gamepad is added
 function addgamepad(gamepad) {
     controllers[gamepad.index] = gamepad; // save gamepad to the controllers dictionary(python)
-    
+
     var d = document.createElement("div"); // create a new section
     d.setAttribute("id", "controller" + gamepad.index); // update the div's id="controller#"
     
@@ -103,8 +180,8 @@ function addgamepad(gamepad) {
     }
     // append the main <div id="controller#"> tag and all the sub tags to the doc body
     document.body.appendChild(d);
-    requestAnimationFrame(updateStatus); // have requestAnimationFrame call updateStatus
-    // setInterval(updateStatus, 50); // check the update status every 50 ms
+    // requestAnimationFrame(updateStatus); // have requestAnimationFrame call updateStatus
+    setInterval(updateStatus, 50); // check the update status every 50 ms
 }
 
 // this is the function that is being listed for by the window and that gets called after a gamepad
@@ -121,58 +198,146 @@ function removegamepad(gamepad) {
     delete controllers[gamepad.index]; // this removes the controller's existance from the dictionary
 }
 
-// This gets called repeatedly to 
+// This gets called repeatedly to check which buttons are being pressed
+// and how what directions/how far the axis controls are being pressed.
 function updateStatus() {
     // if not 'ongamepadconnected' in window, if no gamepad is connected, scan for gamepads
     if (!haveEvents) {
         scangamepads();
     }
-    // if a gamepad is connected:
     var i = 0;
     var j;
-
+    // if a gamepad is connected:
     // for every j controller navigator.getGamepads()[i] in controllers dictionary
     for (j in controllers) {
-        var controller = controllers[j];
-        var d = document.getElementById("controller" + j); // get the right controller element from the dict
-        var buttons = d.getElementsByClassName("button"); // get a list of all the button elements for the controller
+        controller = controllers[j];
+        d = document.getElementById("controller" + j); // get the right controller element from the dict
+        htmlButtons = d.getElementsByClassName("button"); // get a list of all the button elements for the controller
     
         // check the following for the number of buttons the controller has
         for (i = 0; i < controller.buttons.length; i++) {
-            var b = buttons[i]; // get the i'th element with button className
-            var val = controller.buttons[i]; // get the value of the button
-            var pressed = val == 1.0;
-            if (typeof(val) == "object") {
-                pressed = val.pressed;
-                val = val.value;
-            }
-            // from val.value, we can get the value of the button
-            var pct = Math.round(val * 120) + "%";
+            controllerButtonObj = controller.buttons[i]; // get the controller's i'th button object
+            btnPressed = controllerButtonObj.pressed; //val is the controller button: pressed: T/F
+            btnValue = controllerButtonObj.value; // value comes from the val object. val is the number returned by the controller button
+            // btnValue is usually 0 or 1, but can also be between 0 and 1
+            // update the css:
+            pct = Math.round(btnValue * 120) + "%";
             // update the webpage to show the button's style.backgroundSize (since the green buttons are images) to 120%
+            b = htmlButtons[i]; // get the i'th element with button className
             b.style.backgroundSize = pct;// + " " + pct;
+            
             // if a button was pressed, update the className to include pressed as well
-            if (pressed) {
+            if (btnPressed) {
                 b.className = "button pressed";
             } else {
                 b.className = "button";
+                // a certain button was not pressed at this time
             }
+
+            // I will keep an array of the buttons that 
+            // // I need to know which button was pressed and
+            if (btnPressed) {
+                if (PS4WebButtonsPressed[i] == false) {
+                    btnPS = document.getElementById("buttonPressedStatement");
+                    btnPS.innerHTML = PS4WebButtonMap[i] + " was pressed";
+                    PS4WebButtonsPressed[i] = true;
+                }
+                // do nothing if there was no change
+            } else { // if this button wasn't being pressed:
+                // if the button just got released:
+                if (PS4WebButtonsPressed[i] == true) {
+                    btnPS = document.getElementById("buttonPressedStatement");
+                    btnPS.innerHTML = PS4WebButtonMap[i] + " was released";
+                    PS4WebButtonsPressed[i] = false;
+                }
+                // do nothing if there was no change
+            }
+            
+            // Since I don't like the idea of performing something (other than
+            // maybe a check to see if something changed)
+            // while a button is being pressed, I am going to make a 
+            // structure that saves the current state of the buttons
+            // and only updates when a change occurs, such as ''"x" was released'
+
+            // Event: change
+            // The event occurs when the content of a form element, the selection, or the checked state have changed (for <input>, <select>, and <textarea>)
+
+
+            //     // this gets called while the button is being pressed
+            //     // console.log(b.innerHTML);
+
+            //     var buttonNum = i;
+
+            //     var x = 0;
+            //     var circle = 1;
+            //     var square = 2;
+            //     var triangle = 3;
+            //     if (buttonNum == x) {
+            //         console.log("x was pressed");
+            //     } else if (buttonNum == circle) {
+            //         console.log("circle was pressed");
+            //     } else if (buttonNum == square) {
+            //         console.log("square was pressed");
+            //     } else if (buttonNum == triangle) {
+            //         console.log("triangle was pressed");
+            //     }
+            // }
         }
     
         // get an array of the axis elements from this controller 
         var axes = d.getElementsByClassName("axis");
+
         // run through every axis in the controller
         for (i = 0; i < controller.axes.length; i++) {
             // get the i'th axis
             var a = axes[i];
             // set the innerhtml to axis#: controller.a.toFixed(4);
-            a.innerHTML = i + ": " + controller.axes[i].toFixed(4);
+            // a.innerHTML = i + ": " + controller.axes[i].toFixed(4);
             // update the progress value for this axis to 1 plus the controller axis value
-            a.setAttribute("value", controller.axes[i] + 1);
+            a.setAttribute("value", controller.axes[i] + 1); // the controller.axes[i] can be +/-1
+            // for each axis (like joystick), I can see what the value is:
+            
+            // If I want to use my joysticks in a game, I need to know 
+            // what their values are...which will be updating constantly.
+            // I will most likely need to wait a certain amount of time before
+            // sampling button inputs. I can set a timer for updating button states
+
+            e = document.getElementById("axisDiv");
+            PS4WebAxisValues[i] = controller.axes[i] + 1; // from 0 to 2
+
+            if (i == 0) { // left stick LR from 0 to 2
+                // axisDiv
+                e.innerHTML = "leftStickLR (" + i + "): " + PS4WebAxisValues[i] +"<br>";
+            } else {
+                if (i == 1) { // left stick UP down from 0 to 2
+                    strAxis = "leftStickUD (";
+                } else if (i == 2) { /// right stick left right 0 to 2
+                    strAxis = "rightStickLR ("
+                } else if (i == 3) { // right stick up down 0 to 2
+                    strAxis = "rightStickUD ("
+                }
+                e.innerHTML += strAxis + i + "): " + PS4WebAxisValues[i] +"<br>";
+            }
+
+            // var PS4WebAxisValues = {
+            //     0: 1,
+            //     1: 1,
+            //     2: 1,
+            //     3: 1
+            // }
+
+
+            // if (iiii == 0) {
+            //     console.log(controller); // console.log(controller.axes[i] + 1)
+            //     iiii = 1;
+            // }
         }
     }
     // either call the updateStatus func again, or set a timer in the func above
-    requestAnimationFrame(updateStatus);
+    // requestAnimationFrame(updateStatus);
 }
+// var iiii = 0;
+
 
 // check the navigator for gamepads
 function scangamepads() {
@@ -193,15 +358,23 @@ function scangamepads() {
     }
 }
 
+function consoleLogButton() {
+    console.log("hello");
+}
+
 // the window is listening for gamepads connecting to the website/pc. If found, trigger connecthandler() function with window as first argument
 window.addEventListener("gamepadconnected", connecthandler);
 window.addEventListener("gamepaddisconnected", disconnecthandler); // also listen for when the gamepad is disconnected
 
+
 // Every 0.5sec, call scangamepads()
 // if not 'ongamepadconnected' in window, scan for gamepads again in 500ms
-if (!haveEvents) {
-    setInterval(scangamepads, 500);
-}
+// The following isn't needed with the window event listener for "gamepadconnected"
+// If I only want to scan for gamepad button changes every n ms, I can use
+// the following rather than rely on hte event listener for button changes (faster)
+// if (!haveEvents) {
+//     setInterval(scangamepads, 500);
+// }
 
 </script>
 
