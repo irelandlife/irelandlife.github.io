@@ -358,9 +358,7 @@ function scangamepads() {
     }
 }
 
-function consoleLogButton() {
-    console.log("hello");
-}
+
 
 // the window is listening for gamepads connecting to the website/pc. If found, trigger connecthandler() function with window as first argument
 window.addEventListener("gamepadconnected", connecthandler);
@@ -372,9 +370,9 @@ window.addEventListener("gamepaddisconnected", disconnecthandler); // also liste
 // The following isn't needed with the window event listener for "gamepadconnected"
 // If I only want to scan for gamepad button changes every n ms, I can use
 // the following rather than rely on hte event listener for button changes (faster)
-// if (!haveEvents) {
-//     setInterval(scangamepads, 500);
-// }
+if (!haveEvents) {
+    setInterval(scangamepads, 500);
+}
 
 </script>
 
