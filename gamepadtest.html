@@ -62,8 +62,9 @@ opacity: 0.7;
 <h1 id="start">Press a button on your controller to start</h2>
 
 <script>
-var haveEvents = 'ongamepadconnected' in window;
-var controllers = {};
+haveEvents = 'ongamepadconnected' in window;
+controllers = {};
+stickyJoystickHelper = 0.07 // make this number higher to reduce the effect of sticky joysticks
 
 // PS4WebAxisMap_iPhone
 PS4WebAxisMap_Windows = {
@@ -269,12 +270,13 @@ function updateStatus() {
         // run through every axis in the controller
         for (i = 0; i < controller.axes.length; i++) {
             // this only updates with a new axis value when a significant change occurs (>0.04)
-            if (Math.abs(PS4WebAxisValues[i] - controller.axes[i]) > 0.04) {
+            if (Math.abs(PS4WebAxisValues[i] - controller.axes[i]) >= 0.01) {
                 PS4WebAxisValues[i] = (controller.axes[i]).toFixed(2); // from -1 to 1
                 // update the progress value for this axis to 1 plus the controller axis value
                 d.getElementsByClassName("axis")[i].setAttribute("value", controller.axes[i] + 1); // the controller.axes[i] can be +/-1
                 // if the axis is less than or at 0.10, consider it 0.
-                if (Math.abs(PS4WebAxisValues[i]) <= 0.10) {
+                // make this number higher to reduce the effect of sticky joysticks
+                if (Math.abs(PS4WebAxisValues[i]) <= stickyJoystickHelper) {
                     PS4WebAxisValues[i] = 0;
                 }
             }
@@ -353,3 +355,6 @@ document.getElementById("axisDiv2").innerHTML =
 
 </body>
 </html>
+
+
+
