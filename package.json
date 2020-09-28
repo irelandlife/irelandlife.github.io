@@ -4,10 +4,11 @@
   "description": "",
   "keywords": [],
   "main": "src/index.js",
+  "homepage": "https://irelandlife.github.io/Astroids2",
   "dependencies": {
     "-": "0.0.1",
     "gh-pages": "^3.1.0",
-    "react": "0.0.0-experimental-f6b8d31a7",
+    "react": ">=0.14.0",
     "react-dom": "0.0.0-experimental-f6b8d31a7",
     "react-reconciler": "0.0.0-experimental-f6b8d31a7",
     "react-scripts": "^3.4.3",
