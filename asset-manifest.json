@@ -1,0 +1,28 @@
+{
+  "files": {
+    "main.js": "/static/js/main.980129bf.chunk.js",
+    "main.js.map": "/static/js/main.980129bf.chunk.js.map",
+    "runtime-main.js": "/static/js/runtime-main.c8364518.js",
+    "runtime-main.js.map": "/static/js/runtime-main.c8364518.js.map",
+    "static/js/2.2af06ece.chunk.js": "/static/js/2.2af06ece.chunk.js",
+    "static/js/2.2af06ece.chunk.js.map": "/static/js/2.2af06ece.chunk.js.map",
+    "index.html": "/index.html",
+    "precache-manifest.21bf8e991d19fff5a4ef90e020e1d72a.js": "/precache-manifest.21bf8e991d19fff5a4ef90e020e1d72a.js",
+    "service-worker.js": "/service-worker.js",
+    "static/js/2.2af06ece.chunk.js.LICENSE.txt": "/static/js/2.2af06ece.chunk.js.LICENSE.txt",
+    "static/media/bg.mp3": "/static/media/bg.a93d8e1a.mp3",
+    "static/media/click.mp3": "/static/media/click.8d516cce.mp3",
+    "static/media/earth.jpg": "/static/media/earth.12d16034.jpg",
+    "static/media/engine.mp3": "/static/media/engine.e896d081.mp3",
+    "static/media/engine2.mp3": "/static/media/engine2.bdb08091.mp3",
+    "static/media/explosion.mp3": "/static/media/explosion.5c5ce697.mp3",
+    "static/media/laser.mp3": "/static/media/laser.a97c8e67.mp3",
+    "static/media/moon.png": "/static/media/moon.8e294414.png",
+    "static/media/warp.mp3": "/static/media/warp.5699f1c4.mp3"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.c8364518.js",
+    "static/js/2.2af06ece.chunk.js",
+    "static/js/main.980129bf.chunk.js"
+  ]
+}
