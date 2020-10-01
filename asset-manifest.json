@@ -6,7 +6,7 @@
     "runtime-main.js.map": "/static/js/runtime-main.c8364518.js.map",
     "static/js/2.2af06ece.chunk.js": "/static/js/2.2af06ece.chunk.js",
     "static/js/2.2af06ece.chunk.js.map": "/static/js/2.2af06ece.chunk.js.map",
-    "index.html": "/index.html",
+    "index.html": "/build/index.html",
     "precache-manifest.21bf8e991d19fff5a4ef90e020e1d72a.js": "/precache-manifest.21bf8e991d19fff5a4ef90e020e1d72a.js",
     "service-worker.js": "/service-worker.js",
     "static/js/2.2af06ece.chunk.js.LICENSE.txt": "/static/js/2.2af06ece.chunk.js.LICENSE.txt",
