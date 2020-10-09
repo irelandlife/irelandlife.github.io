@@ -12,7 +12,7 @@ body {
      font-size: 25pt;
     }
     
-    #centerTheTopDropdownList {
+    #menuList {
         /* essential for keeping the main ul centered on the page */
         display: flex;
         justify-content: center;
