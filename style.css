@@ -1,7 +1,7 @@
 body {
     /* no-repeat */
      padding: 0px;
-     margin: 0px;
+     margin: 40px;
      background-image: url("nature.jpg");
      background-repeat: repeat-y;
      /* background-repeat: no-repeat; */
@@ -17,12 +17,10 @@ body {
         display: flex;
         justify-content: center;
       }
-
-    #pageText {
-        margin-left: 20px;       
-    }
     
     ul {
+      margin: 0px;
+      padding: 0px;
      list-style: none;
      font-family: arial;
     }
