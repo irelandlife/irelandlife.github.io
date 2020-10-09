@@ -2,7 +2,6 @@ body {
     /* no-repeat */
      padding: 0px;
      margin: 0px;
-    margin-left
      background-image: url("nature.jpg");
      background-repeat: repeat-y;
      /* background-repeat: no-repeat; */
@@ -19,9 +18,9 @@ body {
         justify-content: center;
       }
 
-/*     #pageText {
+    #pageText {
         margin-left: 20px;       
-} */
+    }
     
     ul {
      list-style: none;
